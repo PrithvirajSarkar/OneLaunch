@@ -1,22 +1,22 @@
-package onelaunch.model;
+package main.java.onelaunch.model;
 
 import java.util.ArrayList;
 
 public class Workspace {
 
     private String name;
-    private ArrayList<Application> applications;//inside it we store application objects eg- vscode,chrome,etc
+    private ArrayList<LaunchApplication> applications;//inside it we store application objects eg- vscode,chrome,etc
 
 public Workspace(String name) {//constructor
     this.name = name;
     this.applications = new ArrayList<>();
 }
 
-public void addApplication(Application application) {//adding app
+public void addApplication(LaunchApplication application) {//adding app
     applications.add(application);
 }
 
-public void removeApplication(Application application) {//removing app
+public void removeApplication(LaunchApplication application) {//removing app
     applications.remove(application);
 }
 
@@ -24,7 +24,7 @@ public String getName() {
         return name;
     }
 
-public ArrayList<Application> getApplications() {
+public ArrayList<LaunchApplication> getApplications() {
         return applications;
     }
 
@@ -34,7 +34,7 @@ public String toString() {
     String data = "";
     data += "Workspace: " + name + "\n";
     data += "Applications:\n";
-    for (Application app : applications) {
+    for (LaunchApplication app : applications) {
         data += app + "\n";
     }
     return data;

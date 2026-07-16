@@ -1,11 +1,11 @@
-package onelaunch.model;
+package main.java.onelaunch.model;
 
-public class Application {
+public class LaunchApplication {
 
     private String name;//encapsulation
     private String path;
 
-    public Application(String name, String path) {//constructor
+    public LaunchApplication(String name, String path) {//constructor
     this.name = name;
     this.path = path;
 }
