@@ -28,4 +28,15 @@ public ArrayList<Application> getApplications() {
         return applications;
     }
 
+@Override
+public String toString() {
+
+    String data = "";
+    data += "Workspace: " + name + "\n";
+    data += "Applications:\n";
+    for (Application app : applications) {
+        data += app + "\n";
+    }
+    return data;
+}
 }

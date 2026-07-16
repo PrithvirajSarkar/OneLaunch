@@ -18,4 +18,8 @@ public class Application {
         return path;
     }
 
+    @Override
+    public String toString() {
+        return "Application: " + name + "\nPath: " + path;
+    }
 }
