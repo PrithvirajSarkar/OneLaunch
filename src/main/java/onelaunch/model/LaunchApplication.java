@@ -1,4 +1,4 @@
-package main.java.onelaunch.model;
+package onelaunch.model;
 
 public class LaunchApplication {
 

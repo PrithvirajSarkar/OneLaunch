@@ -1,4 +1,4 @@
-package main.java.onelaunch.ui;
+package onelaunch.ui;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
