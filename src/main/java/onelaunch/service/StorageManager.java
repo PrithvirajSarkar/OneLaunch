@@ -13,9 +13,9 @@ import java.io.FileReader;
 import java.io.IOException;
 public class StorageManager {
 
-    private static final String FILE_PATH = "C:\\Users\\user\\OneDrive\\Desktop\\FILES\\OneLaunch\\data\\workspaces.json";
+    private static final String FILE_PATH = "data/workspaces.json";
 
-public void saveWorkspaces(ArrayList<Workspace> workspaces) {
+    public void saveWorkspaces(ArrayList<Workspace> workspaces) {
     Gson gson = new Gson();
     
     String data = gson.toJson(workspaces);
@@ -32,7 +32,18 @@ public void saveWorkspaces(ArrayList<Workspace> workspaces) {
     }
 }
 
-public ArrayList<Workspace> loadWorkspaces() {
+
+    public void saveWorkspace(Workspace workspace) {
+    //ts method loads old workspaces , adds new one and saves everything
+    ArrayList<Workspace> workspaces = loadWorkspaces();
+
+    workspaces.add(workspace);
+
+    saveWorkspaces(workspaces);
+    }
+
+    
+    public ArrayList<Workspace> loadWorkspaces() {
 
     Gson gson = new Gson();
 
