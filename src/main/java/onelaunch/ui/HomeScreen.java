@@ -67,6 +67,9 @@ public class HomeScreen {
         Label workspaceNameLabel = new Label(workspace.getName());
         HBox buttonHBox = new HBox(10);
         Button launchButton = new Button("Launch");
+        launchButton.setOnAction(e -> {
+            main.launchWorkspace(workspace);
+        });
         launchButton.setPrefWidth(100);
         Button editButton = new Button("Edit");
         editButton.setOnAction(e ->{
