@@ -180,11 +180,11 @@ public class AddApplicationsScreen {
 
             for (int i = 0; i < workspaces.size(); i++) {
                 if(workspaces.get(i).getName().equals(originalWorkspace.getName())){
-                    workspaces.remove(i);
+                    workspaces.set(i, workspace);
                     break;
                 }
             }
-            workspaces.add(workspace);
+            
             storageManager.saveWorkspaces(workspaces);
         }
         else{

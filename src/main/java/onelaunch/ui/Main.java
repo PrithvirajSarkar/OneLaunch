@@ -69,16 +69,13 @@ public class Main extends Application {
                 
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Launch Error");
-                alert.setHeaderText("OneLaunch couldn't launch an application.");
-                alert.setContentText(
-                "The application may have been moved, renamed, deleted, "
-                + "or you may not have permission.\n\n"
-                + "Continue launching the remaining applications?"
-            );
-            Optional<ButtonType> result = alert.showAndWait();
-            if(result.orElse(ButtonType.CANCEL) == ButtonType.CANCEL){
+                alert.setHeaderText("Couldn't launch \"" + app.getName() + "\"");
+                alert.setContentText("Continue launching the remaining applications?");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if(result.orElse(ButtonType.CANCEL) == ButtonType.CANCEL){
                 return;
-            }
+                }
             }
         }
     }
