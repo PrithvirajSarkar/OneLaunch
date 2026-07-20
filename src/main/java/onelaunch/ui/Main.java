@@ -61,6 +61,17 @@ public class Main extends Application {
     }
 
     public void launchWorkspace(Workspace workspace) {
+        if (workspace.getApplications().isEmpty()) {
+            // Show alert
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Empty Workspace");
+
+            alert.setHeaderText("No applications to launch.");
+
+            alert.setContentText("This workspace doesn't contain any applications.");
+            alert.showAndWait();
+            return;
+        }
         for( LaunchApplication app : workspace.getApplications()) {
             try {
                 ProcessBuilder builder = new ProcessBuilder(app.getPath());

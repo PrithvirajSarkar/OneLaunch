@@ -167,8 +167,38 @@ public class AddApplicationsScreen {
         Button saveWorkspaceButton = new Button("Save Workspace");
         //saving the details
 
-        saveWorkspaceButton.setOnAction(e -> {
+    saveWorkspaceButton.setOnAction(e -> {
+        workspaceName = workspaceName.trim();
 
+    if (workspaceName.isEmpty()) {
+
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Empty Workspace Name");
+        alert.setHeaderText("Workspace name cannot be empty.");
+        alert.setContentText("Please enter a workspace name.");
+        alert.showAndWait();
+        return;
+    }
+
+    ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
+
+    for (Workspace existingWorkspace : workspaces) {
+
+        if (isEditMode &&
+                existingWorkspace.getName().equalsIgnoreCase(originalWorkspace.getName())) {
+                continue;
+        }
+
+        if (existingWorkspace.getName().equalsIgnoreCase(workspaceName)) {
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Duplicate Workspace");
+            alert.setHeaderText("A workspace with this name already exists.");
+            alert.setContentText("Please choose a different workspace name.");
+            alert.showAndWait();
+            return;
+        }
+    }
         Workspace workspace = new Workspace(workspaceName);
 
         for (LaunchApplication app : applications) {
@@ -176,10 +206,9 @@ public class AddApplicationsScreen {
             workspace.addApplication(app);
         }
         if(isEditMode){
-            ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
 
             for (int i = 0; i < workspaces.size(); i++) {
-                if(workspaces.get(i).getName().equals(originalWorkspace.getName())){
+                if(workspaces.get(i).getName().equalsIgnoreCase(originalWorkspace.getName())){
                     workspaces.set(i, workspace);
                     break;
                 }
