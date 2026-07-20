@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import onelaunch.model.Workspace;
 
 public class Main extends Application {
 
@@ -47,6 +48,10 @@ public class Main extends Application {
         scene.setRoot(
                 new AddApplicationsScreen(this, workspaceName).create()
         );
+    }
+
+    public void showEditWorkspaceScreen(Workspace workspace){
+        scene.setRoot(new AddApplicationsScreen(this, workspace,true).create());
     }
 
     public static void main(String[] args) {

@@ -1,11 +1,13 @@
 package onelaunch.ui;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import onelaunch.service.StorageManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -67,7 +69,30 @@ public class HomeScreen {
         Button launchButton = new Button("Launch");
         launchButton.setPrefWidth(100);
         Button editButton = new Button("Edit");
+        editButton.setOnAction(e ->{
+            main.showEditWorkspaceScreen(workspace);
+        });
         Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(e ->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Delete Workspace");
+                alert.setHeaderText("Confirm Deletion");
+                alert.setContentText("Are you sure you want to delete \""+workspace.getName()+"\"?");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if(result.isPresent() && result.get() == ButtonType.OK){
+                    //delete workspace 
+                    ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
+                    for(int i = 0 ; i < workspaces.size(); i++){
+                        if(workspaces.get(i).getName().equals(workspace.getName())){
+                            workspaces.remove(i);
+                            break;
+                        }
+                    }
+                    storageManager.saveWorkspaces(workspaces);
+                    main.showHomeScreen();
+                }
+        });
         
         buttonHBox.getChildren().addAll(
             launchButton,

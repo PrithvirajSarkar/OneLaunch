@@ -26,15 +26,25 @@ public class AddApplicationsScreen {
 
     private Main main;
     private String workspaceName;
+    private boolean isEditMode = false;
+    private Workspace originalWorkspace;
     private ArrayList<LaunchApplication> applications = new ArrayList<>();
     private StorageManager storageManager = new StorageManager();
     private VBox applicationsContainer;
     private boolean hasUnsavedChanges = false;
 
 
-    public AddApplicationsScreen(Main main, String workspaceName ) {
+    public AddApplicationsScreen(Main main, String workspaceName) {
         this.main = main;
         this.workspaceName = workspaceName;
+    }
+
+    public AddApplicationsScreen(Main main, Workspace workspace, boolean isEditMode) {
+    this.main = main;
+    this.workspaceName = workspace.getName();
+    this.applications = new ArrayList<>(workspace.getApplications());
+    this.originalWorkspace = workspace;
+    this.isEditMode = isEditMode;
     }
 
     public VBox create() {
@@ -165,8 +175,21 @@ public class AddApplicationsScreen {
 
             workspace.addApplication(app);
         }
+        if(isEditMode){
+            ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
 
-        storageManager.saveWorkspace(workspace);
+            for (int i = 0; i < workspaces.size(); i++) {
+                if(workspaces.get(i).getName().equals(originalWorkspace.getName())){
+                    workspaces.remove(i);
+                    break;
+                }
+            }
+            workspaces.add(workspace);
+            storageManager.saveWorkspaces(workspaces);
+        }
+        else{
+            storageManager.saveWorkspace(workspace);
+        }
         hasUnsavedChanges = false;
         main.showHomeScreen();
         });
@@ -233,3 +256,5 @@ public class AddApplicationsScreen {
     }
 
 }
+
+//COMPLETED ALL FEATURES !!!!!!!!
