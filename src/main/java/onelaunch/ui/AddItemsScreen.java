@@ -2,7 +2,7 @@ package onelaunch.ui;
 
 import java.io.File;
 import java.util.ArrayList;
-import onelaunch.model.LaunchApplication;
+import onelaunch.model.LaunchItem;
 import onelaunch.model.Workspace;
 import onelaunch.service.StorageManager;
 import javafx.geometry.Insets;
@@ -22,27 +22,27 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.control.TextInputDialog;
 
-public class AddApplicationsScreen {
+public class AddItemsScreen {
 
     private Main main;
     private String workspaceName;
     private boolean isEditMode = false;
     private Workspace originalWorkspace;
-    private ArrayList<LaunchApplication> applications = new ArrayList<>();
+    private ArrayList<LaunchItem> items = new ArrayList<>();
     private StorageManager storageManager = new StorageManager();
-    private VBox applicationsContainer;
+    private VBox itemsContainer;
     private boolean hasUnsavedChanges = false;
 
 
-    public AddApplicationsScreen(Main main, String workspaceName) {
+    public AddItemsScreen(Main main, String workspaceName) {
         this.main = main;
         this.workspaceName = workspaceName;
     }
 
-    public AddApplicationsScreen(Main main, Workspace workspace, boolean isEditMode) {
+    public AddItemsScreen(Main main, Workspace workspace, boolean isEditMode) {
     this.main = main;
     this.workspaceName = workspace.getName();
-    this.applications = new ArrayList<>(workspace.getApplications());
+    this.items = new ArrayList<>(workspace.getItems());
     this.originalWorkspace = workspace;
     this.isEditMode = isEditMode;
     }
@@ -55,7 +55,7 @@ public class AddApplicationsScreen {
         root.setPadding(new Insets(20));
 
         // Title
-        Label title = new Label("Add Applications");
+        Label title = new Label("Add Items");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
         // Workspace header
@@ -91,50 +91,66 @@ public class AddApplicationsScreen {
                 editButton
         );
 
-        // Applications Heading
-        HBox applicationsHeader = new HBox();
-        applicationsHeader.setAlignment(Pos.CENTER_LEFT);
+        // Items Heading
+        HBox itemsHeader = new HBox();
+        itemsHeader.setAlignment(Pos.CENTER_LEFT);
 
-        Label applicationsLabel = new Label("Applications");
+        Label itemsLabel = new Label("Items");
         Pane spacer2 = new Pane();
         HBox.setHgrow(spacer2, Priority.ALWAYS);
 
-        Button addApplicationButton = new Button("+ Add Application");
+        Button addItemButton = new Button("+ Add Item");
         //it will open file chooser 
-        addApplicationButton.setOnAction(e -> {
+        addItemButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(main.getStage());
             
             if(selectedFile != null){
-                LaunchApplication application = new LaunchApplication(
+                LaunchItem item = new LaunchItem(
                 selectedFile.getName(),
                 selectedFile.getAbsolutePath()
             );
-            applications.add(application);
-            applicationsContainer.getChildren().add(createApplicationRow(application));
+            for (LaunchItem existingItem : items) {
+                if (selectedFile.getAbsolutePath().equalsIgnoreCase(existingItem.getPath())) {
+
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+
+                alert.setTitle("Duplicate Item");
+                alert.setHeaderText("This Item has already been added.");
+                alert.setContentText(
+                    "This item already exists in this workspace."
+                );
+
+                alert.showAndWait();
+                return;
+            }
+        }
+
+            items.add(item);
+            itemsContainer.getChildren().add(createItemRow(item));
             hasUnsavedChanges = true;
             }
         });
-        applicationsHeader.getChildren().addAll(
-        applicationsLabel,
+        itemsHeader.getChildren().addAll(
+        itemsLabel,
         spacer2,
-        addApplicationButton
+        addItemButton
         );
 
-        applicationsContainer = new VBox();
-        applicationsContainer.setSpacing(10);
+        itemsContainer = new VBox();
+        itemsContainer.setSpacing(10);
 
-        //Load all existing applications
-        for (LaunchApplication app : applications) {
+        //Load all existing items
+        for (LaunchItem item : items) {
 
-            applicationsContainer.getChildren().add(
-            createApplicationRow(app)
+            itemsContainer.getChildren().add(
+            createItemRow(item)
             );
         }
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefHeight(250);
         scrollPane.setFitToWidth(true);
-        scrollPane.setContent(applicationsContainer);
+        scrollPane.setContent(itemsContainer);
 
         HBox bottomButtons = new HBox();
         bottomButtons.setAlignment(Pos.CENTER_LEFT);
@@ -201,9 +217,9 @@ public class AddApplicationsScreen {
     }
         Workspace workspace = new Workspace(workspaceName);
 
-        for (LaunchApplication app : applications) {
+        for (LaunchItem item : items) {
 
-            workspace.addApplication(app);
+            workspace.addItem(item);
         }
         if(isEditMode){
 
@@ -233,7 +249,7 @@ public class AddApplicationsScreen {
         root.getChildren().addAll(
                 title,
                 workspaceBox,
-                applicationsHeader,
+                itemsHeader,
                 scrollPane,
                 bottomButtons
         );
@@ -241,14 +257,14 @@ public class AddApplicationsScreen {
         return root;
     }
 
-    private HBox createApplicationRow(LaunchApplication application) {
+    private HBox createItemRow(LaunchItem item) {
 
-        HBox appRow = new HBox();
-        appRow.setSpacing(10);
-        appRow.setAlignment(Pos.CENTER_LEFT);
+        HBox itemRow = new HBox();
+        itemRow.setSpacing(10);
+        itemRow.setAlignment(Pos.CENTER_LEFT);
 
         Label iconLabel = new Label("O");
-        Label nameLabel = new Label(application.getName());
+        Label nameLabel = new Label(item.getName());
 
         Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -257,31 +273,31 @@ public class AddApplicationsScreen {
         deleteButton.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-            alert.setTitle("Delete Application");
+            alert.setTitle("Delete Item");
             alert.setHeaderText("Confirm Deletion");
             alert.setContentText(
             "Are you sure you want to remove \"" +
-            application.getName() +
+            item.getName() +
             "\"?");
 
             Optional<ButtonType> result = alert.showAndWait();
 
             if(result.isPresent() && result.get() == ButtonType.OK){
-            applications.remove(application);
-            applicationsContainer.getChildren().remove((appRow));
+            items.remove(item);
+            itemsContainer.getChildren().remove((itemRow));
             hasUnsavedChanges = true;
             }
         });
 
         
-        appRow.getChildren().addAll(
+        itemRow.getChildren().addAll(
                 iconLabel,
                 nameLabel,
                 spacer,
                 deleteButton
         );
 
-        return appRow;
+        return itemRow;
     }
 
 }

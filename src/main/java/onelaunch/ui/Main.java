@@ -9,7 +9,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import onelaunch.model.LaunchApplication;
+import onelaunch.model.LaunchItem;
 import onelaunch.model.Workspace;
 
 public class Main extends Application {
@@ -49,39 +49,43 @@ public class Main extends Application {
         );
     }
 
-    public void showAddApplicationsScreen(String workspaceName) {
+    public void showAddItemsScreen(String workspaceName) {
 
         scene.setRoot(
-                new AddApplicationsScreen(this, workspaceName).create()
+                new AddItemsScreen(this, workspaceName).create()
         );
     }
 
     public void showEditWorkspaceScreen(Workspace workspace){
-        scene.setRoot(new AddApplicationsScreen(this, workspace,true).create());
+        System.out.println("Editing: " + workspace.getName());
+        System.out.println(workspace.getItems());
+        scene.setRoot(new AddItemsScreen(this, workspace,true).create());
     }
 
     public void launchWorkspace(Workspace workspace) {
-        if (workspace.getApplications().isEmpty()) {
+        System.out.println("Launching: " + workspace.getName());
+        System.out.println(workspace.getItems());
+        if (workspace.getItems().isEmpty()) {
             // Show alert
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Empty Workspace");
 
-            alert.setHeaderText("No applications to launch.");
+            alert.setHeaderText("No items to launch.");
 
-            alert.setContentText("This workspace doesn't contain any applications.");
+            alert.setContentText("This workspace doesn't contain any items.");
             alert.showAndWait();
             return;
         }
-        for( LaunchApplication app : workspace.getApplications()) {
+        for( LaunchItem item : workspace.getItems()) {
             try {
-                ProcessBuilder builder = new ProcessBuilder(app.getPath());
+                ProcessBuilder builder = new ProcessBuilder(item.getPath());
                 builder.start();
             } catch (IOException e) {
                 
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Launch Error");
-                alert.setHeaderText("Couldn't launch \"" + app.getName() + "\"");
-                alert.setContentText("Continue launching the remaining applications?");
+                alert.setHeaderText("Couldn't launch \"" + item.getName() + "\"");
+                alert.setContentText("Continue launching the remaining items?");
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if(result.orElse(ButtonType.CANCEL) == ButtonType.CANCEL){

@@ -65,7 +65,7 @@ public class AddWorkspaceScreen {
                 errorLabel.setManaged(false);
                 errorLabel.setVisible(false);
 
-                main.showAddApplicationsScreen(workspaceNameField.getText());
+                main.showAddItemsScreen(workspaceNameField.getText());
 
             }
 

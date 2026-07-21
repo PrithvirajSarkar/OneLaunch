@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
 
-import onelaunch.model.LaunchApplication;
+import onelaunch.model.LaunchItem;
 import onelaunch.model.Workspace;
 
 import java.io.FileWriter;

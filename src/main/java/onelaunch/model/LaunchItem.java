@@ -1,11 +1,11 @@
 package onelaunch.model;
 
-public class LaunchApplication {
+public class LaunchItem {
 
     private String name;//encapsulation
     private String path;
 
-    public LaunchApplication(String name, String path) {//constructor
+    public LaunchItem(String name, String path) {//constructor
     this.name = name;
     this.path = path;
 }
@@ -20,6 +20,6 @@ public class LaunchApplication {
 
     @Override
     public String toString() {
-        return "Application: " + name + "\nPath: " + path;
+        return "Item: " + name + "\nPath: " + path;
     }
 }
