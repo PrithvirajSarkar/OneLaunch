@@ -104,35 +104,106 @@ public class AddItemsScreen {
         Button addItemButton = new Button("+ Add Item");
         //it will open file chooser 
         addItemButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            File selectedFile = fileChooser.showOpenDialog(main.getStage());
-            
-            ItemType type = detectItemType(selectedFile);
-                LaunchItem item = new LaunchItem(
+
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Add Item");
+    alert.setHeaderText("Choose what you want to add.");
+
+    ButtonType browseButton = new ButtonType("Browse");
+    ButtonType websiteButton = new ButtonType("Website");
+
+    alert.getButtonTypes().setAll(
+            browseButton,
+            websiteButton,
+            ButtonType.CANCEL
+    );
+
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if (result.isEmpty() || result.get() == ButtonType.CANCEL) {
+        return;
+    }
+
+    LaunchItem item = null;
+
+    // Browse
+    if (result.get() == browseButton) {
+
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(main.getStage());
+
+        if (selectedFile == null) {
+            return;
+        }
+
+        ItemType type = detectItemType(selectedFile);
+
+        item = new LaunchItem(
                 selectedFile.getName(),
                 selectedFile.getAbsolutePath(),
                 type
-            );
-            for (LaunchItem existingItem : items) {
-                if (selectedFile.getAbsolutePath().equalsIgnoreCase(existingItem.getPath())) {
+        );
+    }
 
-                Alert alert = new Alert(Alert.AlertType.WARNING);
+    // Website
+    else if (result.get() == websiteButton) {
 
-                alert.setTitle("Duplicate Item");
-                alert.setHeaderText("This Item has already been added.");
-                alert.setContentText(
-                    "This item already exists in this workspace."
-                );
+        TextInputDialog dialog = new TextInputDialog("https://");
 
-                alert.showAndWait();
-                return;
-            }
+        dialog.setTitle("Add Website");
+        dialog.setHeaderText("Enter Website URL");
+        dialog.setContentText("URL:");
+
+        Optional<String> websiteResult = dialog.showAndWait();
+
+        if (websiteResult.isEmpty()) {
+            return;
         }
 
-            items.add(item);
-            itemsContainer.getChildren().add(createItemRow(item));
-            hasUnsavedChanges = true;
-        });
+        String url = websiteResult.get().trim();
+
+        if (url.isEmpty()) {
+            return;
+        }
+
+        if (!url.startsWith("http://") &&
+            !url.startsWith("https://")) {
+
+            url = "https://" + url;
+        }
+
+        item = new LaunchItem(
+                url,
+                url,
+                ItemType.WEBSITE
+        );
+    }
+
+    // Duplicate Check
+    for (LaunchItem existingItem : items) {
+
+        if (existingItem.getPath().equalsIgnoreCase(item.getPath())) {
+
+            Alert duplicateAlert = new Alert(Alert.AlertType.WARNING);
+
+            duplicateAlert.setTitle("Duplicate Item");
+            duplicateAlert.setHeaderText("This item has already been added.");
+            duplicateAlert.setContentText(
+                    "This item already exists in this workspace."
+            );
+
+            duplicateAlert.showAndWait();
+            return;
+        }
+    }
+
+    
+    // Add Item
+    items.add(item);
+    itemsContainer.getChildren().add(createItemRow(item));
+    hasUnsavedChanges = true;});
+
+
         itemsHeader.getChildren().addAll(
         itemsLabel,
         spacer2,

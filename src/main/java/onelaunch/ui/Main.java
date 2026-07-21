@@ -11,6 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import onelaunch.model.LaunchItem;
 import onelaunch.model.Workspace;
+import java.awt.Desktop;
+import java.net.URI;
+import java.io.File;
+import onelaunch.model.ItemType;
 
 public class Main extends Application {
 
@@ -78,9 +82,25 @@ public class Main extends Application {
         }
         for( LaunchItem item : workspace.getItems()) {
             try {
-                ProcessBuilder builder = new ProcessBuilder(item.getPath());
-                builder.start();
-            } catch (IOException e) {
+                switch (item.getType()) {
+
+        case APPLICATION:
+        new ProcessBuilder(item.getPath()).start();
+        break;
+
+        case FILE:
+        Desktop.getDesktop().open(new File(item.getPath()));
+        break;
+
+        case FOLDER:
+        Desktop.getDesktop().open(new File(item.getPath()));
+        break;
+
+        case WEBSITE:
+        Desktop.getDesktop().browse(new URI(item.getPath()));
+        break;
+}
+            } catch (Exception e) {
                 
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Launch Error");
