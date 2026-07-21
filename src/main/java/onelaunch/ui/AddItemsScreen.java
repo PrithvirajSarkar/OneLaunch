@@ -2,6 +2,8 @@ package onelaunch.ui;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import onelaunch.model.ItemType;
 import onelaunch.model.LaunchItem;
 import onelaunch.model.Workspace;
 import onelaunch.service.StorageManager;
@@ -105,10 +107,11 @@ public class AddItemsScreen {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(main.getStage());
             
-            if(selectedFile != null){
+            ItemType type = detectItemType(selectedFile);
                 LaunchItem item = new LaunchItem(
                 selectedFile.getName(),
-                selectedFile.getAbsolutePath()
+                selectedFile.getAbsolutePath(),
+                type
             );
             for (LaunchItem existingItem : items) {
                 if (selectedFile.getAbsolutePath().equalsIgnoreCase(existingItem.getPath())) {
@@ -129,7 +132,6 @@ public class AddItemsScreen {
             items.add(item);
             itemsContainer.getChildren().add(createItemRow(item));
             hasUnsavedChanges = true;
-            }
         });
         itemsHeader.getChildren().addAll(
         itemsLabel,
@@ -299,6 +301,23 @@ public class AddItemsScreen {
 
         return itemRow;
     }
+
+
+
+    private ItemType detectItemType(File file){
+        if (file.isDirectory()) {
+        return ItemType.FOLDER;
+    }
+
+    else if (file.getAbsolutePath().toLowerCase().endsWith(".exe")) {
+        return ItemType.APPLICATION;
+    }
+
+    else {
+        return ItemType.FILE;
+    } 
+    }
+
 
 }
 
