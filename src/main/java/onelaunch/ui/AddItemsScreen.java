@@ -336,7 +336,8 @@ public class AddItemsScreen {
         itemRow.setSpacing(10);
         itemRow.setAlignment(Pos.CENTER_LEFT);
 
-        Label iconLabel = new Label("O");
+        Label iconLabel = new Label(getItemIcon(item));
+        iconLabel.setStyle("-fx-font-size: 18px;" + "-fx-padding:0 8 0 0;");
         Label nameLabel = new Label(item.getName());
 
         Pane spacer = new Pane();
@@ -361,7 +362,6 @@ public class AddItemsScreen {
             hasUnsavedChanges = true;
             }
         });
-
         
         itemRow.getChildren().addAll(
                 iconLabel,
@@ -373,7 +373,25 @@ public class AddItemsScreen {
         return itemRow;
     }
 
+    private String getItemIcon(LaunchItem item){
+        switch (item.getType()) {
 
+        case APPLICATION:
+            return "🖥";
+
+        case WEBSITE:
+            return "🌐";
+
+        case FOLDER:
+            return "📁";
+
+        case FILE:
+            return "📄";
+
+        default:
+            return "❓";
+        }
+    }
 
     private ItemType detectItemType(File file){
         if (file.isDirectory()) {
