@@ -11,9 +11,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import onelaunch.model.Workspace;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 public class HomeScreen {
 
@@ -28,20 +28,34 @@ public class HomeScreen {
 
         VBox root = new VBox();
 
-        root.setAlignment(Pos.CENTER);
         root.setSpacing(20);
-        root.setPadding(new Insets(20));
+        root.setPadding(new Insets(25));
 
         Label title = new Label("OneLaunch");
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        title.getStyleClass().add("title-label");
 
-        Button addWorkspaceButton = new Button("Add Workspace");
-        addWorkspaceButton.setPrefWidth(250);
-        addWorkspaceButton.setPrefHeight(60);
+        Button addWorkspaceButton = new Button("+ New Workspace");
+        addWorkspaceButton.getStyleClass().add("primary-button");
 
         addWorkspaceButton.setOnAction(event -> {
             main.showAddWorkspaceScreen();
         });
+
+        Button menuButton = new Button("⋮");
+        menuButton.getStyleClass().add("menu-button");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox header = new HBox(15);
+        header.setAlignment(Pos.CENTER_LEFT);
+
+        header.getChildren().addAll(
+                title,
+                spacer,
+                addWorkspaceButton,
+                menuButton
+        );
 
         VBox workspaceContainer = new VBox(15);
 
@@ -55,8 +69,7 @@ public class HomeScreen {
         }
 
         root.getChildren().addAll(
-                title,
-                addWorkspaceButton,
+                header,
                 workspaceContainer
         );
 
@@ -65,17 +78,22 @@ public class HomeScreen {
 
     private VBox createWorkspaceCard(Workspace workspace) {
         Label workspaceNameLabel = new Label(workspace.getName());
-        HBox buttonHBox = new HBox(10);
+        workspaceNameLabel.getStyleClass().add("subtitle-label");
+        
         Button launchButton = new Button("Launch");
+        launchButton.getStyleClass().add("success-button");
+        launchButton.setPrefWidth(100);
         launchButton.setOnAction(e -> {
             main.launchWorkspace(workspace);
         });
-        launchButton.setPrefWidth(100);
+
         Button editButton = new Button("Edit");
+        editButton.getStyleClass().add("secondary-button");
         editButton.setOnAction(e ->{
             main.showEditWorkspaceScreen(workspace);
         });
         Button deleteButton = new Button("Delete");
+        deleteButton.getStyleClass().add("danger-button");
         deleteButton.setOnAction(e ->{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Delete Workspace");
@@ -96,18 +114,19 @@ public class HomeScreen {
                     main.showHomeScreen();
                 }
         });
-        
-        buttonHBox.getChildren().addAll(
+        HBox buttonRow = new HBox(10);
+        buttonRow.getChildren().addAll(
             launchButton,
             editButton,
             deleteButton
         );
 
         VBox workspaceCard = new VBox(10);
+        workspaceCard.getStyleClass().add("workspace-card");
 
         workspaceCard.getChildren().addAll(
         workspaceNameLabel,
-        buttonHBox
+        buttonRow
         );
 
         return workspaceCard;

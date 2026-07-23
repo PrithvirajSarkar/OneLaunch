@@ -1,6 +1,5 @@
 package onelaunch.ui;
 
-import java.io.IOException;
 import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -14,7 +13,7 @@ import onelaunch.model.Workspace;
 import java.awt.Desktop;
 import java.net.URI;
 import java.io.File;
-import onelaunch.model.ItemType;
+
 
 public class Main extends Application {
 
@@ -28,6 +27,9 @@ public class Main extends Application {
         VBox root = new HomeScreen(this).create();
 
         scene = new Scene(root, 900, 600);
+        scene.getStylesheets().add(
+            getClass().getResource("/style.css").toExternalForm()
+        );
 
         stage.setTitle("OneLaunch");
         stage.setScene(scene);
