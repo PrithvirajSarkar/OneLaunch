@@ -19,9 +19,9 @@
 }
 
 .subtitle-label {
-    -fx-font-size: 18px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: #222222;
+    -fx-text-fill: #1f2937;
 }
 
 /* ---------------------------
@@ -101,6 +101,14 @@
 
 }
 
+.workspace-card:hover{
+
+    -fx-background-color:#FAFAFA;
+
+    -fx-border-color:#CFCFCF;
+
+}
+
 /* ---------------------------
    Text Fields
 ---------------------------- */
@@ -144,5 +152,62 @@
     -fx-background-color: #EAEAEA;
 
     -fx-background-radius: 8;
+
+}
+
+.menu-button .arrow {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+/* ---------------------------
+   Search Bar
+---------------------------- */
+
+.search-field {
+
+    -fx-pref-height: 42;
+
+    -fx-font-size: 14px;
+
+    -fx-background-radius: 8;
+
+    -fx-border-radius: 8;
+
+    -fx-border-color: #DCDCDC;
+
+    -fx-background-color: white;
+
+    -fx-padding: 0 12;
+
+}
+
+.search-field:focused {
+
+    -fx-border-color: #2563EB;
+
+}
+
+
+/* ---------------------------
+   Section Heading
+---------------------------- */
+
+.section-heading {
+
+    -fx-font-size: 13px;
+
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #666666;
+
+    -fx-padding: 5 0 0 2;
+
+}
+
+.preview-label{
+
+    -fx-text-fill:#6B7280;
+    -fx-font-size:13px;
 
 }

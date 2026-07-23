@@ -14,6 +14,11 @@ import javafx.scene.layout.VBox;
 import onelaunch.model.Workspace;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.control.TextField;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Pane;
+import onelaunch.model.LaunchItem;
 
 public class HomeScreen {
 
@@ -24,12 +29,22 @@ public class HomeScreen {
         this.main = main;
     }
 
+    private String capitalize(String text){
+
+    if(text == null || text.isBlank()){
+        return text;
+    }
+
+    return text.substring(0,1).toUpperCase()
+            + text.substring(1);
+    }
+
     public VBox create() {
 
         VBox root = new VBox();
 
         root.setSpacing(20);
-        root.setPadding(new Insets(25));
+        root.setPadding(new Insets(30));
 
         Label title = new Label("OneLaunch");
         title.getStyleClass().add("title-label");
@@ -41,8 +56,8 @@ public class HomeScreen {
             main.showAddWorkspaceScreen();
         });
 
-        Button menuButton = new Button("⋮");
-        menuButton.getStyleClass().add("menu-button");
+        Button settingsButton = new Button("⚙");
+        settingsButton.getStyleClass().add("menu-button");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -54,8 +69,16 @@ public class HomeScreen {
                 title,
                 spacer,
                 addWorkspaceButton,
-                menuButton
+                settingsButton
         );
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("🔍 Search workspaces...");
+        searchField.getStyleClass().add("search-field");
+        searchField.setMaxWidth(480);
+
+        Label workspaceHeading = new Label("WORKSPACES");
+        workspaceHeading.getStyleClass().add("section-heading");
 
         VBox workspaceContainer = new VBox(15);
 
@@ -70,6 +93,8 @@ public class HomeScreen {
 
         root.getChildren().addAll(
                 header,
+                searchField,
+                workspaceHeading,
                 workspaceContainer
         );
 
@@ -77,21 +102,30 @@ public class HomeScreen {
     }
 
     private VBox createWorkspaceCard(Workspace workspace) {
-        Label workspaceNameLabel = new Label(workspace.getName());
+
+        //Workspace Name
+        Label workspaceNameLabel = new Label("💻 " + capitalize(workspace.getName()));
         workspaceNameLabel.getStyleClass().add("subtitle-label");
-        
-        Button launchButton = new Button("Launch");
+
+        //Preview
+        Label previewLabel = new Label(getPreviewText(workspace));
+        previewLabel.getStyleClass().add("preview-label");
+
+        //Launch
+        Button launchButton = new Button("▶ Launch");
         launchButton.getStyleClass().add("success-button");
-        launchButton.setPrefWidth(100);
         launchButton.setOnAction(e -> {
             main.launchWorkspace(workspace);
         });
 
+        //Edit
         Button editButton = new Button("Edit");
         editButton.getStyleClass().add("secondary-button");
         editButton.setOnAction(e ->{
             main.showEditWorkspaceScreen(workspace);
         });
+
+        //Delete
         Button deleteButton = new Button("Delete");
         deleteButton.getStyleClass().add("danger-button");
         deleteButton.setOnAction(e ->{
@@ -114,21 +148,68 @@ public class HomeScreen {
                     main.showHomeScreen();
                 }
         });
+
+        //Menu
+        MenuItem pinItem = new MenuItem("📌 Pin Workspace");
+        MenuButton workspaceMenu = new MenuButton("⋮");
+        workspaceMenu.getItems().add(pinItem);
+
+        //Buttons Row
         HBox buttonRow = new HBox(10);
+
+        Pane spacer = new Pane();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        buttonRow.setAlignment(Pos.CENTER_LEFT);
+
         buttonRow.getChildren().addAll(
+            spacer,
             launchButton,
             editButton,
-            deleteButton
+            deleteButton,
+            workspaceMenu
         );
 
-        VBox workspaceCard = new VBox(10);
+        VBox workspaceCard = new VBox(6);
         workspaceCard.getStyleClass().add("workspace-card");
 
         workspaceCard.getChildren().addAll(
         workspaceNameLabel,
+        previewLabel,
         buttonRow
         );
 
         return workspaceCard;
+    }
+
+    private String getPreviewText(Workspace workspace) {
+
+    ArrayList<LaunchItem> items = workspace.getItems();
+
+    if (items.isEmpty()) {
+        return "No items added";
+    }
+
+    StringBuilder preview = new StringBuilder();
+
+    int limit = Math.min(3, items.size());
+
+    for (int i = 0; i < limit; i++) {
+
+        preview.append(items.get(i).getName());
+
+        if (i < limit - 1) {
+            preview.append(" • ");
+        }
+    }
+
+    if (items.size() > 3) {
+
+        preview.append(" • +")
+               .append(items.size() - 3)
+               .append(" more");
+    }
+
+    return preview.toString();
     }
 }

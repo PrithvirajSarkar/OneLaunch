@@ -409,5 +409,3 @@ public class AddItemsScreen {
 
 
 }
-
-//COMPLETED ALL FEATURES !!!!!!!!
