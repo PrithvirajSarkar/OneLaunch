@@ -77,19 +77,22 @@ public class HomeScreen {
         searchField.getStyleClass().add("search-field");
         searchField.setMaxWidth(480);
 
+        VBox workspaceContainer = new VBox(15);
+        ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
+        displayWorkspaces(workspaceContainer, workspaces, "");
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            displayWorkspaces(
+            workspaceContainer,
+            workspaces,
+            newValue
+        );
+    });
+
         Label workspaceHeading = new Label("WORKSPACES");
         workspaceHeading.getStyleClass().add("section-heading");
 
-        VBox workspaceContainer = new VBox(15);
-
-        ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
-
-        for (Workspace workspace : workspaces) {
-
-        workspaceContainer.getChildren().add(
-            createWorkspaceCard(workspace)
-        );
-        }
+        displayWorkspaces(workspaceContainer, workspaces,"");
 
         root.getChildren().addAll(
                 header,
@@ -100,6 +103,25 @@ public class HomeScreen {
 
         return root;
     }
+
+    private void displayWorkspaces(VBox workspaceContainer,ArrayList<Workspace> workspaces, String searchText) {
+
+        workspaceContainer.getChildren().clear();
+
+        String search = searchText.toLowerCase();
+        for (Workspace workspace : workspaces) {
+            if(search.isBlank() || workspace.getName().toLowerCase().contains(search)){
+                workspaceContainer.getChildren().add(createWorkspaceCard(workspace));
+            }
+        }
+
+        if (workspaceContainer.getChildren().isEmpty()) {
+            Label emptyLabel = new Label("No workspaces found.");
+            emptyLabel.getStyleClass().add("preview-label");
+            workspaceContainer.getChildren().add(emptyLabel);
+        }
+    }
+
 
     private VBox createWorkspaceCard(Workspace workspace) {
 
