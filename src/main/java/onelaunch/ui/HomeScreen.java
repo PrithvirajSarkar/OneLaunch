@@ -79,7 +79,6 @@ public class HomeScreen {
 
         VBox workspaceContainer = new VBox(15);
         ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
-        displayWorkspaces(workspaceContainer, workspaces, "");
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             displayWorkspaces(
@@ -89,15 +88,11 @@ public class HomeScreen {
         );
     });
 
-        Label workspaceHeading = new Label("WORKSPACES");
-        workspaceHeading.getStyleClass().add("section-heading");
-
         displayWorkspaces(workspaceContainer, workspaces,"");
 
         root.getChildren().addAll(
                 header,
                 searchField,
-                workspaceHeading,
                 workspaceContainer
         );
 
@@ -109,13 +104,55 @@ public class HomeScreen {
         workspaceContainer.getChildren().clear();
 
         String search = searchText.toLowerCase();
+
+        boolean displayedWorkspace = false;
+
+        boolean hasPinned = false;
+
+        boolean hasUnpinned = false;
+
         for (Workspace workspace : workspaces) {
-            if(search.isBlank() || workspace.getName().toLowerCase().contains(search)){
-                workspaceContainer.getChildren().add(createWorkspaceCard(workspace));
+            if(workspace.isPinned() && (search.isBlank() || workspace.getName().toLowerCase().contains(search))){
+                hasPinned = true;
+                break;
             }
         }
 
-        if (workspaceContainer.getChildren().isEmpty()) {
+        for (Workspace workspace : workspaces) {
+            if(!workspace.isPinned() && (search.isBlank() || workspace.getName().toLowerCase().contains(search))){
+                hasUnpinned = true;
+                break;
+            }
+        }
+
+        if (hasPinned) {
+            Label pinnedHeading = new Label("PINNED");
+            pinnedHeading.getStyleClass().add("section-heading");
+
+            workspaceContainer.getChildren().add(pinnedHeading);
+
+            for (Workspace workspace : workspaces) {
+                if(workspace.isPinned() && (search.isBlank() || workspace.getName().toLowerCase().contains(search))){
+                    workspaceContainer.getChildren().add(createWorkspaceCard(workspace,workspaces));
+                    displayedWorkspace = true;
+                }
+            }
+        }
+        if(hasUnpinned){
+        Label workspaceHeading = new Label("WORKSPACES");
+        workspaceHeading.getStyleClass().add("section-heading");
+
+        workspaceContainer.getChildren().add(workspaceHeading);
+        }
+
+        for (Workspace workspace : workspaces) {
+            if(!workspace.isPinned() && (search.isBlank() || workspace.getName().toLowerCase().contains(search))){
+                workspaceContainer.getChildren().add(createWorkspaceCard(workspace,workspaces));
+                displayedWorkspace = true;
+            }
+        }
+
+        if (!displayedWorkspace) {
             Label emptyLabel = new Label("No workspaces found.");
             emptyLabel.getStyleClass().add("preview-label");
             workspaceContainer.getChildren().add(emptyLabel);
@@ -123,7 +160,7 @@ public class HomeScreen {
     }
 
 
-    private VBox createWorkspaceCard(Workspace workspace) {
+    private VBox createWorkspaceCard(Workspace workspace,ArrayList<Workspace> workspaces) {
 
         //Workspace Name
         Label workspaceNameLabel = new Label("💻 " + capitalize(workspace.getName()));
@@ -159,7 +196,7 @@ public class HomeScreen {
 
                 if(result.isPresent() && result.get() == ButtonType.OK){
                     //delete workspace 
-                    ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
+                    
                     for(int i = 0 ; i < workspaces.size(); i++){
                         if(workspaces.get(i).getName().equals(workspace.getName())){
                             workspaces.remove(i);
@@ -172,7 +209,23 @@ public class HomeScreen {
         });
 
         //Menu
-        MenuItem pinItem = new MenuItem("📌 Pin Workspace");
+        MenuItem pinItem;
+        if(workspace.isPinned()) {
+            pinItem = new MenuItem("📍 Unpin Workspace");
+        }
+        else {
+            pinItem = new MenuItem("📌 Pin Workspace");
+        }
+        pinItem.setOnAction(e -> {
+
+        workspace.setPinned(!workspace.isPinned());
+
+        storageManager.saveWorkspaces(workspaces);
+
+        main.showHomeScreen();
+        });
+
+
         MenuButton workspaceMenu = new MenuButton("⋮");
         workspaceMenu.getItems().add(pinItem);
 

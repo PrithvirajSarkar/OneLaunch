@@ -6,10 +6,20 @@ public class Workspace {
 
     private String name;
     private ArrayList<LaunchItem> items;//inside it we store item objects eg- vscode,chrome,files,folders etc
+    private boolean pinned;
 
 public Workspace(String name) {//constructor
     this.name = name;
     this.items = new ArrayList<>();
+    this.pinned = false;
+}
+
+public boolean isPinned() {
+    return pinned;
+}
+
+public void setPinned(boolean pinned) {
+    this.pinned = pinned;
 }
 
 public void addItem(LaunchItem item) {//adding app
