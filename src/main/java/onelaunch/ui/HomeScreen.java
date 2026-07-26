@@ -163,7 +163,7 @@ public class HomeScreen {
     private VBox createWorkspaceCard(Workspace workspace,ArrayList<Workspace> workspaces) {
 
         //Workspace Name
-        Label workspaceNameLabel = new Label("💻 " + capitalize(workspace.getName()));
+        Label workspaceNameLabel = new Label(capitalize(workspace.getName()));
         workspaceNameLabel.getStyleClass().add("subtitle-label");
 
         //Preview
