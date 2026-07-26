@@ -19,7 +19,7 @@
 }
 
 .subtitle-label {
-    -fx-font-size: 22px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: #1f2937;
 }
@@ -95,9 +95,16 @@
 
     -fx-border-color: #DDDDDD;
 
-    -fx-padding: 16;
+    -fx-padding: 14;
 
-    -fx-spacing: 12;
+    -fx-spacing: 8;
+    
+    -fx-effect:dropshadow(gaussian,
+                          rgba(0,0,0,0.05),
+                          6,
+                          0,
+                          0,
+                          2);
 
 }
 
@@ -217,8 +224,8 @@
 
 .preview-label{
 
-    -fx-text-fill:#6B7280;
-    -fx-font-size:13px;
+    -fx-text-fill:#808A9A;
+    -fx-font-size:12px;
 
 }
 

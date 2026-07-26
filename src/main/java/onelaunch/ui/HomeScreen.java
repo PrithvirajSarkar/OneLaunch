@@ -17,7 +17,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.control.TextField;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Pane;
 import onelaunch.model.LaunchItem;
 
 public class HomeScreen {
@@ -43,7 +42,7 @@ public class HomeScreen {
 
         VBox root = new VBox();
 
-        root.setSpacing(20);
+        root.setSpacing(18);
         root.setPadding(new Insets(30));
 
         Label title = new Label("OneLaunch");
@@ -60,9 +59,10 @@ public class HomeScreen {
         settingsButton.getStyleClass().add("menu-button");
 
         Region spacer = new Region();
+        spacer.setMinWidth(25);
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        HBox header = new HBox(15);
+        HBox header = new HBox(18);
         header.setAlignment(Pos.CENTER_LEFT);
 
         header.getChildren().addAll(
@@ -75,7 +75,7 @@ public class HomeScreen {
         TextField searchField = new TextField();
         searchField.setPromptText("🔍 Search workspaces...");
         searchField.getStyleClass().add("search-field");
-        searchField.setMaxWidth(480);
+        searchField.setMaxWidth(520);
 
         VBox workspaceContainer = new VBox(15);
         ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
@@ -154,8 +154,21 @@ public class HomeScreen {
 
         if (!displayedWorkspace) {
             Label emptyLabel = new Label("No workspaces found.");
-            emptyLabel.getStyleClass().add("preview-label");
-            workspaceContainer.getChildren().add(emptyLabel);
+            emptyLabel.getStyleClass().add("subtitle-label");
+
+            Label emptySubtitle = new Label("Try another search or create a new workspace.");
+            emptySubtitle.getStyleClass().add("preview-label");
+
+            VBox emptyState = new VBox(8);
+            emptyState.setMinHeight(250);
+            emptyState.setAlignment(Pos.CENTER);
+
+            emptyState.getChildren().addAll(
+                emptyLabel,
+                emptySubtitle
+            );
+
+            workspaceContainer.getChildren().add(emptyState);
         }
     }
 
@@ -163,7 +176,7 @@ public class HomeScreen {
     private VBox createWorkspaceCard(Workspace workspace,ArrayList<Workspace> workspaces) {
 
         //Workspace Name
-        Label workspaceNameLabel = new Label(capitalize(workspace.getName()));
+        Label workspaceNameLabel = new Label("📁 "+capitalize(workspace.getName()));
         workspaceNameLabel.getStyleClass().add("subtitle-label");
 
         //Preview
@@ -172,6 +185,7 @@ public class HomeScreen {
 
         //Launch
         Button launchButton = new Button("▶ Launch");
+        launchButton.setPrefHeight(38);
         launchButton.getStyleClass().add("success-button");
         launchButton.setOnAction(e -> {
             main.launchWorkspace(workspace);
@@ -179,6 +193,7 @@ public class HomeScreen {
 
         //Edit
         Button editButton = new Button("Edit");
+        editButton.setPrefHeight(38);
         editButton.getStyleClass().add("secondary-button");
         editButton.setOnAction(e ->{
             main.showEditWorkspaceScreen(workspace);
@@ -186,6 +201,7 @@ public class HomeScreen {
 
         //Delete
         Button deleteButton = new Button("Delete");
+        deleteButton.setPrefHeight(38);
         deleteButton.getStyleClass().add("danger-button");
         deleteButton.setOnAction(e ->{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -211,10 +227,10 @@ public class HomeScreen {
         //Menu
         MenuItem pinItem;
         if(workspace.isPinned()) {
-            pinItem = new MenuItem("📍 Unpin Workspace");
+            pinItem = new MenuItem("Unpin Workspace");
         }
         else {
-            pinItem = new MenuItem("📌 Pin Workspace");
+            pinItem = new MenuItem("Pin Workspace");
         }
         pinItem.setOnAction(e -> {
 
@@ -227,12 +243,14 @@ public class HomeScreen {
 
 
         MenuButton workspaceMenu = new MenuButton("⋮");
+        workspaceMenu.setPrefWidth(36);
+        workspaceMenu.getStyleClass().add("menu-button");
         workspaceMenu.getItems().add(pinItem);
 
         //Buttons Row
         HBox buttonRow = new HBox(10);
 
-        Pane spacer = new Pane();
+        Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         buttonRow.setAlignment(Pos.CENTER_LEFT);
