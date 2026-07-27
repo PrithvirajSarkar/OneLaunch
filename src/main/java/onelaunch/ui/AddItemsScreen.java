@@ -76,7 +76,7 @@ public class AddItemsScreen {
         Pane spacer1 = new Pane();
         HBox.setHgrow(spacer1, Priority.ALWAYS);
 
-        Button editButton = new Button("Rename");
+        Button editButton = new Button("✎ Rename");
         editButton.getStyleClass().add("secondary-button");
         editButton.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog(workspaceName);
@@ -356,7 +356,7 @@ public class AddItemsScreen {
         Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button deleteButton = new Button("X");
+        Button deleteButton = new Button("🗑");
         deleteButton.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 

@@ -155,23 +155,57 @@ public class HomeScreen {
         }
 
         if (!displayedWorkspace) {
-            Label emptyLabel = new Label("No workspaces found.");
-            emptyLabel.getStyleClass().add("subtitle-label");
-
-            Label emptySubtitle = new Label("Try another search or create a new workspace.");
-            emptySubtitle.getStyleClass().add("preview-label");
-
-            VBox emptyState = new VBox(8);
-            emptyState.setMinHeight(250);
-            emptyState.setAlignment(Pos.CENTER);
-
-            emptyState.getChildren().addAll(
-                emptyLabel,
-                emptySubtitle
-            );
-
-            workspaceContainer.getChildren().add(emptyState);
+            if(workspaces.isEmpty()){
+                workspaceContainer.getChildren().add(createWelcomeEmptyState());
+            }
+            else{
+                workspaceContainer.getChildren().add(createSearchEmptyState());
+            }
         }
+    }
+
+    private VBox createWelcomeEmptyState() {
+
+    Label title = new Label("Welcome to OneLaunch");
+    title.getStyleClass().add("subtitle-label");
+
+    Label subtitle = new Label(
+            "Create your first workspace to launch everything\n"
+          + "with a single click."
+    );
+    subtitle.getStyleClass().add("preview-label");
+    subtitle.setAlignment(Pos.CENTER);
+
+    VBox box = new VBox(10);
+    box.setAlignment(Pos.CENTER);
+    box.setMinHeight(260);
+
+    box.getChildren().addAll(
+            title,
+            subtitle
+    );
+
+    return box;
+    }
+
+    private VBox createSearchEmptyState() {
+
+    Label title = new Label("No matching workspaces");
+    title.getStyleClass().add("subtitle-label");
+
+    Label subtitle = new Label("Try another search.");
+    subtitle.getStyleClass().add("preview-label");
+
+    VBox box = new VBox(10);
+    box.setAlignment(Pos.CENTER);
+    box.setMinHeight(260);
+
+    box.getChildren().addAll(
+            title,
+            subtitle
+    );
+
+    return box;
     }
 
 
