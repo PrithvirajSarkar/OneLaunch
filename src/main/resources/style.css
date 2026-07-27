@@ -260,3 +260,18 @@
     -fx-text-fill:#6B7280;
 
 }
+
+.items-scroll-pane {
+
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+
+}
+
+.items-scroll-pane > .viewport {
+
+    -fx-background-color: transparent;
+
+}

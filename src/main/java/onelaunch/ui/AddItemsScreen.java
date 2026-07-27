@@ -22,7 +22,7 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.control.TextInputDialog;
 import javafx.application.Platform;
-
+import javafx.scene.layout.Region;
 public class AddItemsScreen {
 
     private Main main;
@@ -58,20 +58,29 @@ public class AddItemsScreen {
         // Title
         Label title = new Label("Add Items");
         title.getStyleClass().add("page-title");
+
+        VBox content = new VBox(24);
+
+        content.setMaxWidth(820);
+        content.setPrefWidth(820);
+        content.setFillWidth(true);
+
+
         // Workspace header
         HBox workspaceBox = new HBox();
         workspaceBox.setAlignment(Pos.CENTER_LEFT);
+        workspaceBox.setMaxWidth(Double.MAX_VALUE);
+
 
         Label workspaceHeading = new Label("Workspace");
         workspaceHeading.getStyleClass().add("section-heading");
         Label workspaceLabel = new Label(capitalize(workspaceName));
         workspaceLabel.getStyleClass().add("subtitle-label");
 
-        VBox workspaceInfo = new VBox(4);
-        workspaceInfo.getChildren().addAll(
-        workspaceHeading,
-        workspaceLabel
-        );
+        HBox workspaceRow = new HBox();
+        workspaceRow.setAlignment(Pos.CENTER_LEFT);
+        workspaceRow.setSpacing(10);
+        workspaceRow.setMaxWidth(Double.MAX_VALUE);
 
         Pane spacer1 = new Pane();
         HBox.setHgrow(spacer1, Priority.ALWAYS);
@@ -95,16 +104,29 @@ public class AddItemsScreen {
 
         });
 
-        workspaceBox.getChildren().addAll(
-                workspaceInfo,
-                spacer1,   
-                editButton
+        workspaceRow.getChildren().addAll(
+        workspaceLabel,
+        spacer1,
+        editButton
         );
+
+        VBox workspaceSection = new VBox(6);
+        workspaceSection.getChildren().addAll(
+        workspaceHeading,
+        workspaceRow
+        );
+
+        workspaceBox.getChildren().add(workspaceSection);
+
+        
         VBox.setMargin(workspaceBox, new Insets(8, 0, 0, 0));
 
         // Items Heading
         HBox itemsHeader = new HBox();
         itemsHeader.setAlignment(Pos.CENTER_LEFT);
+        itemsHeader.setPadding(new Insets(0, 0, 6, 0));
+        itemsHeader.setMaxWidth(Double.MAX_VALUE);
+
 
         Label itemsLabel = new Label("Items");
         itemsLabel.getStyleClass().add("subtitle-label");
@@ -211,7 +233,7 @@ public class AddItemsScreen {
     
     // Add Item
     items.add(item);
-    itemsContainer.getChildren().add(createItemRow(item));
+    refreshItems();
     hasUnsavedChanges = true;});
 
 
@@ -225,19 +247,21 @@ public class AddItemsScreen {
         itemsContainer.setSpacing(10);
 
         //Load all existing items
-        for (LaunchItem item : items) {
+        refreshItems();
 
-            itemsContainer.getChildren().add(
-            createItemRow(item)
-            );
-        }
+
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefHeight(250);
+        scrollPane.getStyleClass().add("items-scroll-pane");
+        scrollPane.setPrefHeight(360);
+        scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         scrollPane.setContent(itemsContainer);
 
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
         HBox bottomButtons = new HBox();
         bottomButtons.setAlignment(Pos.CENTER_LEFT);
+        bottomButtons.setMaxWidth(Double.MAX_VALUE);
 
 
         Button backButton = new Button("← Back");
@@ -330,12 +354,16 @@ public class AddItemsScreen {
         saveWorkspaceButton
         );
 
-        root.getChildren().addAll(
-                title,
+        content.getChildren().addAll(
                 workspaceBox,
                 itemsHeader,
                 scrollPane,
                 bottomButtons
+        );
+
+        root.getChildren().addAll(
+            title,
+            content
         );
 
         Platform.runLater(() -> addItemButton.requestFocus());
@@ -343,20 +371,70 @@ public class AddItemsScreen {
         return root;
     }
 
-    private HBox createItemRow(LaunchItem item) {
 
-        HBox itemRow = new HBox();
-        itemRow.setSpacing(10);
-        itemRow.setAlignment(Pos.CENTER_LEFT);
+    private void refreshItems() {
+
+    itemsContainer.getChildren().clear();
+
+    if(items.isEmpty()){
+
+        itemsContainer.getChildren().add(
+            createEmptyState()
+        );
+
+        return;
+    }
+
+    for(LaunchItem item : items){
+
+        itemsContainer.getChildren().add(
+            createItemRow(item)
+        );
+    }
+    }
+
+
+    private VBox createEmptyState() {
+
+    Label title = new Label("No items added yet");
+    title.getStyleClass().add("subtitle-label");
+
+    Label subtitle = new Label(
+            "Click \"+ Add Item\"\n"
+          + "to add applications,\n"
+          + "folders, files or websites."
+    );
+
+    subtitle.getStyleClass().add("preview-label");
+    subtitle.setAlignment(Pos.CENTER);
+
+    VBox box = new VBox(8);
+    box.setAlignment(Pos.CENTER);
+    box.setMinHeight(140);
+
+    box.getChildren().addAll(
+            title,
+            subtitle
+    );
+
+    return box;
+    }
+
+    private VBox createItemRow(LaunchItem item) {
+
+        HBox row = new HBox();
+        row.setMinHeight(42);
+        row.setAlignment(Pos.CENTER_LEFT);
 
         Label iconLabel = new Label(getItemIcon(item));
-        iconLabel.setStyle("-fx-font-size: 18px;" + "-fx-padding:0 8 0 0;");
+        iconLabel.setStyle("-fx-font-size: 18px;" + "-fx-padding:0 10 0 0;");
+
         Label nameLabel = new Label(item.getName());
 
-        Pane spacer = new Pane();
+        Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button deleteButton = new Button("🗑");
+        Button deleteButton = new Button("✕");
         deleteButton.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -371,19 +449,30 @@ public class AddItemsScreen {
 
             if(result.isPresent() && result.get() == ButtonType.OK){
             items.remove(item);
-            itemsContainer.getChildren().remove((itemRow));
+            refreshItems();
             hasUnsavedChanges = true;
             }
         });
         
-        itemRow.getChildren().addAll(
+        row.getChildren().addAll(
                 iconLabel,
                 nameLabel,
                 spacer,
                 deleteButton
         );
 
-        return itemRow;
+        Region separator = new Region();
+        separator.setPrefHeight(1);
+        separator.setStyle("-fx-background-color:#E5E7EB;");
+
+        VBox itemBox = new VBox(14);
+
+        itemBox.getChildren().addAll(
+            row,
+            separator
+        );
+
+    return itemBox;
     }
 
     private String getItemIcon(LaunchItem item){
