@@ -65,6 +65,7 @@ public class HomeScreen {
         HBox header = new HBox(18);
         header.setAlignment(Pos.CENTER_LEFT);
 
+
         header.getChildren().addAll(
                 title,
                 spacer,
@@ -77,6 +78,7 @@ public class HomeScreen {
         searchField.getStyleClass().add("search-field");
         searchField.setMaxWidth(520);
 
+        
         VBox workspaceContainer = new VBox(15);
         ArrayList<Workspace> workspaces = storageManager.loadWorkspaces();
 

@@ -185,6 +185,10 @@
 
     -fx-pref-height: 42;
 
+    -fx-min-height: 42px;
+    
+    -fx-max-height: 42px;
+
     -fx-font-size: 14px;
 
     -fx-background-radius: 8;

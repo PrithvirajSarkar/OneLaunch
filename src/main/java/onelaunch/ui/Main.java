@@ -13,6 +13,8 @@ import onelaunch.model.Workspace;
 import java.awt.Desktop;
 import java.net.URI;
 import java.io.File;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.Parent;
 
 
 public class Main extends Application {
@@ -26,7 +28,7 @@ public class Main extends Application {
 
         VBox root = new HomeScreen(this).create();
 
-        scene = new Scene(root, 900, 600);
+        scene = new Scene(wrapInScrollPane(root),900,600);
         scene.getStylesheets().add(
             getClass().getResource("/style.css").toExternalForm()
         );
@@ -40,26 +42,38 @@ public class Main extends Application {
     return stage;
     }
 
+
+    private ScrollPane wrapInScrollPane(Parent content) {
+
+    ScrollPane scrollPane = new ScrollPane(content);
+
+    scrollPane.setFitToWidth(true);
+
+    scrollPane.setFitToHeight(true);
+
+    scrollPane.setPannable(true);
+
+    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+    return scrollPane;
+    }
+
     
     public void showHomeScreen() {
 
-        scene.setRoot(
-                new HomeScreen(this).create()
-        );
+        scene.setRoot(wrapInScrollPane(new HomeScreen(this).create()));
     }
 
     public void showAddWorkspaceScreen() {
 
-        scene.setRoot(
-                new AddWorkspaceScreen(this).create()
-        );
+        scene.setRoot(new AddWorkspaceScreen(this).create());
     }
 
     public void showAddItemsScreen(String workspaceName) {
 
-        scene.setRoot(
-                new AddItemsScreen(this, workspaceName).create()
-        );
+        scene.setRoot(new AddItemsScreen(this, workspaceName).create());
     }
 
     public void showEditWorkspaceScreen(Workspace workspace){

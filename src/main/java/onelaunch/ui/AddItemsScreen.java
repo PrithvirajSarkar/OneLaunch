@@ -16,13 +16,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.control.TextInputDialog;
+import javafx.application.Platform;
 
 public class AddItemsScreen {
 
@@ -58,18 +57,27 @@ public class AddItemsScreen {
 
         // Title
         Label title = new Label("Add Items");
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-
+        title.getStyleClass().add("page-title");
         // Workspace header
         HBox workspaceBox = new HBox();
         workspaceBox.setAlignment(Pos.CENTER_LEFT);
 
-        Label workspaceLabel = new Label(workspaceName);
+        Label workspaceHeading = new Label("Workspace");
+        workspaceHeading.getStyleClass().add("section-heading");
+        Label workspaceLabel = new Label(capitalize(workspaceName));
+        workspaceLabel.getStyleClass().add("subtitle-label");
+
+        VBox workspaceInfo = new VBox(4);
+        workspaceInfo.getChildren().addAll(
+        workspaceHeading,
+        workspaceLabel
+        );
 
         Pane spacer1 = new Pane();
         HBox.setHgrow(spacer1, Priority.ALWAYS);
 
-        Button editButton = new Button("Edit");
+        Button editButton = new Button("Rename");
+        editButton.getStyleClass().add("secondary-button");
         editButton.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog(workspaceName);
             dialog.setTitle("Rename Workspace");
@@ -88,16 +96,19 @@ public class AddItemsScreen {
         });
 
         workspaceBox.getChildren().addAll(
-                workspaceLabel,
+                workspaceInfo,
                 spacer1,   
                 editButton
         );
+        VBox.setMargin(workspaceBox, new Insets(8, 0, 0, 0));
 
         // Items Heading
         HBox itemsHeader = new HBox();
         itemsHeader.setAlignment(Pos.CENTER_LEFT);
 
         Label itemsLabel = new Label("Items");
+        itemsLabel.getStyleClass().add("subtitle-label");
+        
         Pane spacer2 = new Pane();
         HBox.setHgrow(spacer2, Priority.ALWAYS);
 
@@ -327,6 +338,8 @@ public class AddItemsScreen {
                 bottomButtons
         );
 
+        Platform.runLater(() -> addItemButton.requestFocus());
+
         return root;
     }
 
@@ -394,11 +407,13 @@ public class AddItemsScreen {
     }
 
     private ItemType detectItemType(File file){
+        String path = file.getAbsolutePath().toLowerCase();
+
         if (file.isDirectory()) {
         return ItemType.FOLDER;
     }
 
-    else if (file.getAbsolutePath().toLowerCase().endsWith(".exe")) {
+    else if (path.endsWith(".exe") || path.endsWith(".lnk")) {
         return ItemType.APPLICATION;
     }
 
@@ -407,5 +422,14 @@ public class AddItemsScreen {
     } 
     }
 
+    private String capitalize(String text) {
+
+    if (text == null || text.isBlank()) {
+        return text;
+    }
+
+    return text.substring(0, 1).toUpperCase()
+            + text.substring(1);
+}
 
 }
