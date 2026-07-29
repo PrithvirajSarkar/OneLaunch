@@ -265,8 +265,6 @@
 
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-background-insets: 0;
-    -fx-padding: 0;
 
 }
 
@@ -274,4 +272,89 @@
 
     -fx-background-color: transparent;
 
+}
+
+.form-card {
+
+    -fx-background-color: white;
+
+    -fx-background-radius: 12;
+
+    -fx-border-radius: 12;
+
+    -fx-border-color: #E5E7EB;
+
+    -fx-padding: 24;
+
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(0,0,0,0.05),
+            8,
+            0,
+            0,
+            2
+    );
+
+}
+
+.item-row {
+
+    -fx-background-color: transparent;
+
+    -fx-border-color: #E5E7EB;
+
+    -fx-border-width: 0 0 1 0;
+
+    -fx-padding: 0 0 8 0;
+}
+
+.item-name {
+
+    -fx-font-size: 14px;
+}
+
+.item-icon {
+
+    -fx-font-size: 17px;
+}
+
+.delete-item-button {
+
+    -fx-background-color: transparent;
+
+    -fx-text-fill: #9CA3AF;
+
+    -fx-font-size: 15px;
+
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 100;
+
+    -fx-min-width: 28;
+    -fx-min-height: 28;
+
+    -fx-max-width: 28;
+    -fx-max-height: 28;
+
+    -fx-padding: 0;
+
+    -fx-cursor: hand;
+}
+
+.delete-item-button:hover {
+
+    -fx-background-color: #FEE2E2;
+
+    -fx-text-fill: #DC2626;
+}
+
+.items-scroll-pane {
+
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.items-scroll-pane > .viewport {
+
+    -fx-background-color: transparent;
 }

@@ -23,6 +23,8 @@ import java.util.Optional;
 import javafx.scene.control.TextInputDialog;
 import javafx.application.Platform;
 import javafx.scene.layout.Region;
+import onelaunch.util.DisplayNameUtil;
+
 public class AddItemsScreen {
 
     private Main main;
@@ -60,6 +62,7 @@ public class AddItemsScreen {
         title.getStyleClass().add("page-title");
 
         VBox content = new VBox(24);
+        content.getStyleClass().add("form-card");
 
         content.setMaxWidth(820);
         content.setPrefWidth(820);
@@ -252,7 +255,7 @@ public class AddItemsScreen {
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("items-scroll-pane");
-        scrollPane.setPrefHeight(360);
+        scrollPane.setPrefHeight(300);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         scrollPane.setContent(itemsContainer);
@@ -423,18 +426,23 @@ public class AddItemsScreen {
     private VBox createItemRow(LaunchItem item) {
 
         HBox row = new HBox();
-        row.setMinHeight(42);
         row.setAlignment(Pos.CENTER_LEFT);
+        row.setSpacing(12);
+        row.setPadding(new Insets(12));
 
         Label iconLabel = new Label(getItemIcon(item));
-        iconLabel.setStyle("-fx-font-size: 18px;" + "-fx-padding:0 10 0 0;");
+        iconLabel.getStyleClass().add("item-icon");
 
-        Label nameLabel = new Label(item.getName());
+        Label nameLabel = new Label(DisplayNameUtil.getDisplayName(item));
+        nameLabel.getStyleClass().add("item-name");
+
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button deleteButton = new Button("✕");
+        Button deleteButton = new Button("ⓧ");
+        deleteButton.getStyleClass().add("delete-item-button");
+
         deleteButton.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -461,16 +469,9 @@ public class AddItemsScreen {
                 deleteButton
         );
 
-        Region separator = new Region();
-        separator.setPrefHeight(1);
-        separator.setStyle("-fx-background-color:#E5E7EB;");
-
-        VBox itemBox = new VBox(14);
-
-        itemBox.getChildren().addAll(
-            row,
-            separator
-        );
+        VBox itemBox = new VBox();
+        itemBox.getStyleClass().add("item-row");
+        itemBox.getChildren().add(row);
 
     return itemBox;
     }
@@ -510,6 +511,8 @@ public class AddItemsScreen {
         return ItemType.FILE;
     } 
     }
+
+
 
     private String capitalize(String text) {
 

@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import onelaunch.model.LaunchItem;
+import onelaunch.util.DisplayNameUtil;
 
 public class HomeScreen {
 
@@ -325,7 +326,7 @@ public class HomeScreen {
 
     for (int i = 0; i < limit; i++) {
 
-        preview.append(items.get(i).getName());
+        preview.append(DisplayNameUtil.getDisplayName(items.get(i)));
 
         if (i < limit - 1) {
             preview.append(" • ");
