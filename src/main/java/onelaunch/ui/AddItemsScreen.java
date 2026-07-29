@@ -54,7 +54,7 @@ public class AddItemsScreen {
 
         VBox root = new VBox();
         root.setAlignment(Pos.TOP_CENTER);
-        root.setSpacing(20);
+        root.setSpacing(26);
         root.setPadding(new Insets(20));
 
         // Title
@@ -64,8 +64,8 @@ public class AddItemsScreen {
         VBox content = new VBox(24);
         content.getStyleClass().add("form-card");
 
-        content.setMaxWidth(820);
-        content.setPrefWidth(820);
+        content.setMaxWidth(780);
+        content.setPrefWidth(780);
         content.setFillWidth(true);
 
 
@@ -255,7 +255,7 @@ public class AddItemsScreen {
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.getStyleClass().add("items-scroll-pane");
-        scrollPane.setPrefHeight(300);
+        scrollPane.setPrefHeight(320);
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         scrollPane.setContent(itemsContainer);
