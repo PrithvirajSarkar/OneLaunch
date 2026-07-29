@@ -88,8 +88,8 @@ public class AddItemsScreen {
         Pane spacer1 = new Pane();
         HBox.setHgrow(spacer1, Priority.ALWAYS);
 
-        Button editButton = new Button("✎ Rename");
-        editButton.getStyleClass().add("secondary-button");
+        Button editButton = new Button("Rename");
+        editButton.getStyleClass().add("rename-button");
         editButton.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog(workspaceName);
             dialog.setTitle("Rename Workspace");
@@ -138,6 +138,7 @@ public class AddItemsScreen {
         HBox.setHgrow(spacer2, Priority.ALWAYS);
 
         Button addItemButton = new Button("+ Add Item");
+        addItemButton.getStyleClass().add("add-item-button");
         //it will open file chooser 
         addItemButton.setOnAction(e -> {
 
@@ -292,6 +293,7 @@ public class AddItemsScreen {
         HBox.setHgrow(spacer3, Priority.ALWAYS);
 
         Button saveWorkspaceButton = new Button("Save Workspace");
+        saveWorkspaceButton.getStyleClass().add("primary-button");
         //saving the details
 
     saveWorkspaceButton.setOnAction(e -> {

@@ -24,11 +24,15 @@
     -fx-text-fill: #1f2937;
 }
 
+.subtitle-label.workspace-name {
+    -fx-text-fill: #2563EB;
+}
 /* ---------------------------
    Buttons
 ---------------------------- */
 
 .button {
+    -fx-font-weight: 500;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
     -fx-padding: 8 16 8 16;
@@ -75,6 +79,9 @@
     -fx-background-color: white;
     -fx-border-color: #DCDCDC;
     -fx-text-fill: #222222;
+    -fx-background-insets: 0;
+    -fx-border-width: 1;
+    -fx-font-weight: 500;
 }
 
 .secondary-button:hover {
@@ -226,19 +233,17 @@
 
 .section-heading {
 
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
 
     -fx-font-weight: bold;
 
-    -fx-text-fill: #666666;
-
-    -fx-padding: 5 0 0 2;
+    -fx-text-fill: #6B7280;
 
 }
 
 .preview-label{
 
-    -fx-text-fill:#808A9A;
+    -fx-text-fill:#6B7280;
     -fx-font-size:12px;
 
 }
@@ -291,11 +296,11 @@
 
     -fx-background-color: white;
 
-    -fx-background-radius: 14;
+    -fx-background-radius: 16;
 
-    -fx-border-radius: 14;
+    -fx-border-radius: 16;
 
-    -fx-border-color: #E5E7EB;
+    -fx-border-color: #ECECEC;
 
     -fx-padding: 20;
 
@@ -314,20 +319,26 @@
 
     -fx-background-color: transparent;
 
-    -fx-border-color: #ECECEC;
+    -fx-border-color: #F1F3F5;
 
     -fx-border-width: 0 0 1 0;
 
     -fx-padding: 0 0 4 0;
 }
 
+.item-row:hover {
+
+    -fx-background-color: #F8FAFF;
+
+}
+
 .item-name {
 
     -fx-font-size: 14px;
 
-    -fx-font-weight: 500;
+    -fx-font-weight: bold;
 
-    -fx-text-fill: #374151;
+    -fx-text-fill: #2D3748;
 }
 
 .item-icon {
@@ -360,9 +371,9 @@
 
 .delete-item-button:hover {
 
-    -fx-background-color: #FEE2E2;
+    -fx-background-color: #FEECEC;
 
-    -fx-text-fill: #DC2626;
+    -fx-text-fill: #EF4444;
 }
 
 .items-scroll-pane {
@@ -378,6 +389,61 @@
 
 .scroll-bar:vertical {
 
-    -fx-pref-width: 10;
+    -fx-pref-width: 8;
+
+}
+.scroll-bar:vertical .track {
+
+    -fx-background-color: transparent;
+
+}
+
+.scroll-bar:vertical .thumb {
+
+    -fx-background-color: #D1D5DB;
+
+    -fx-background-radius: 100;
+
+}
+
+.scroll-bar:vertical .thumb:hover {
+
+    -fx-background-color: #9CA3AF;
+
+}
+
+.add-item-button {
+
+    -fx-background-color: #EFF6FF;
+
+    -fx-border-color: #2563EB;
+
+    -fx-border-width: 1;
+
+    -fx-text-fill: #2563EB;
+
+}
+
+.add-item-button:hover {
+
+    -fx-background-color: #DBEAFE;
+
+}
+
+.rename-button {
+
+    -fx-background-color: #FFFBEB;
+
+    -fx-border-color: #FBBF24;
+
+    -fx-border-width: 1;
+
+    -fx-text-fill: #92400E;
+
+}
+
+.rename-button:hover {
+
+    -fx-background-color: #FFEDD5;
 
 }
