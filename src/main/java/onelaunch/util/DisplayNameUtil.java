@@ -4,6 +4,8 @@ import onelaunch.model.LaunchItem;
 
 public final class DisplayNameUtil {
 
+    private static final int MAX_DISPLAY_LENGTH = 24;
+
     private DisplayNameUtil() {
     }
 
@@ -26,18 +28,32 @@ public final class DisplayNameUtil {
                     url = url.substring(0, slash);
                 }
 
-                return url;
+                return truncate(url);
 
             case APPLICATION:
 
                 if (name.toLowerCase().endsWith(".exe")) {
-                    return name.substring(0, name.length() - 4);
+                    return truncate(name.substring(0, name.length() - 4));
                 }
 
-                return name;
+                return truncate(name);
 
             default:
-                return name;
+
+                return truncate(name);
         }
+    }
+
+    private static String truncate(String text) {
+
+        if (text == null) {
+            return "";
+        }
+
+        if (text.length() <= MAX_DISPLAY_LENGTH) {
+            return text;
+        }
+
+        return text.substring(0, MAX_DISPLAY_LENGTH - 1) + "…";
     }
 }
