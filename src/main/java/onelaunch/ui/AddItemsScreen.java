@@ -21,9 +21,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.application.Platform;
 import javafx.scene.layout.Region;
 import onelaunch.util.DisplayNameUtil;
+import onelaunch.util.IconUtil;
+import javafx.scene.Node;
 
 public class AddItemsScreen {
 
@@ -203,6 +206,17 @@ public class AddItemsScreen {
             return;
         }
 
+        if(!url.contains(".") && !url.equalsIgnoreCase("localhost")) {
+            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+            alert1.setTitle(("Invalid Website"));
+            alert1.setHeaderText("Please enter a valid website.");
+            alert1.setContentText(
+        "Examples:\n" +
+        "youtube.com\n" +
+        "github.com\n");
+            alert1.showAndWait();
+            return;
+        }
         if (!url.startsWith("http://") &&
             !url.startsWith("https://")) {
 
@@ -432,8 +446,8 @@ public class AddItemsScreen {
         row.setSpacing(12);
         row.setPadding(new Insets(12));
 
-        Label iconLabel = new Label(getItemIcon(item));
-        iconLabel.getStyleClass().add("item-icon");
+        Node icon = IconUtil.getIcon(item.getType(), 18);
+        icon.getStyleClass().add("item-icon");
 
         Label nameLabel = new Label(DisplayNameUtil.getDisplayName(item));
         nameLabel.getStyleClass().add("item-name");
@@ -452,7 +466,7 @@ public class AddItemsScreen {
             alert.setHeaderText("Confirm Deletion");
             alert.setContentText(
             "Are you sure you want to remove \"" +
-            item.getName() +
+            DisplayNameUtil.getDisplayName(item) +
             "\"?");
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -465,7 +479,7 @@ public class AddItemsScreen {
         });
         
         row.getChildren().addAll(
-                iconLabel,
+                icon,
                 nameLabel,
                 spacer,
                 deleteButton
@@ -478,25 +492,6 @@ public class AddItemsScreen {
     return itemBox;
     }
 
-    private String getItemIcon(LaunchItem item){
-        switch (item.getType()) {
-
-        case APPLICATION:
-            return "🖥";
-
-        case WEBSITE:
-            return "🌐";
-
-        case FOLDER:
-            return "📁";
-
-        case FILE:
-            return "📄";
-
-        default:
-            return "❓";
-        }
-    }
 
     private ItemType detectItemType(File file){
         String path = file.getAbsolutePath().toLowerCase();
