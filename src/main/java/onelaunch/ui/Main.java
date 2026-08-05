@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import onelaunch.model.LaunchItem;
 import onelaunch.model.Workspace;
+import onelaunch.util.DialogUtil;
+
 import java.awt.Desktop;
 import java.net.URI;
 import java.io.File;
@@ -87,18 +89,18 @@ public class Main extends Application {
         System.out.println(workspace.getItems());
         if (workspace.getItems().isEmpty()) {
             // Show alert
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Empty Workspace");
-
-            alert.setHeaderText("No items to launch.");
-
-            alert.setContentText("This workspace doesn't contain any items.");
-            alert.showAndWait();
+            DialogUtil.showInfo(
+                "Empty Workspace", 
+                "No items to launch.", 
+                "This workspace doesn't contain any items."
+            );
             return;
         }
         for( LaunchItem item : workspace.getItems()) {
-            try {
-                switch (item.getType()) {
+
+        try {
+                
+        switch (item.getType()) {
 
         case APPLICATION:
         new ProcessBuilder(item.getPath()).start();

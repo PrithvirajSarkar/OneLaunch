@@ -20,6 +20,8 @@ import javafx.scene.control.MenuItem;
 import onelaunch.model.LaunchItem;
 import onelaunch.util.DisplayNameUtil;
 import onelaunch.util.IconUtil;
+import onelaunch.util.DialogUtil;
+import onelaunch.util.DialogUtil.ConfirmationStyle;
 
 public class HomeScreen {
 
@@ -246,13 +248,12 @@ public class HomeScreen {
         deleteButton.setPrefHeight(38);
         deleteButton.getStyleClass().add("danger-button");
         deleteButton.setOnAction(e ->{
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Delete Workspace");
-                alert.setHeaderText("Confirm Deletion");
-                alert.setContentText("Are you sure you want to delete \""+workspace.getName()+"\"?");
-                Optional<ButtonType> result = alert.showAndWait();
-
-                if(result.isPresent() && result.get() == ButtonType.OK){
+            boolean confirmed = DialogUtil.showConfirmation(
+                "Delete Workspace",
+                "Delete \"" + workspace.getName() + "\"?",
+                "This action cannot be undone.",
+                "Delete", "Cancel", ConfirmationStyle.DANGER);
+                if(confirmed){
                     //delete workspace 
                     
                     for(int i = 0 ; i < workspaces.size(); i++){

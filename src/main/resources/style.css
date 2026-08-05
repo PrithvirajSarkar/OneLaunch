@@ -350,30 +350,17 @@
 
     -fx-background-color: transparent;
 
-    -fx-text-fill: #9CA3AF;
-
-    -fx-font-size: 15px;
-
-    -fx-font-weight: bold;
-
-    -fx-background-radius: 100;
-
-    -fx-min-width: 28;
-    -fx-min-height: 28;
-
-    -fx-max-width: 28;
-    -fx-max-height: 28;
-
-    -fx-padding: 0;
+    -fx-padding: 6px;
 
     -fx-cursor: hand;
 }
 
-.delete-item-button:hover {
+.delete-item-button .ikonli-font-icon {
+    -fx-icon-color: #9CA3AF;
+}
 
-    -fx-background-color: #FEECEC;
-
-    -fx-text-fill: #EF4444;
+.delete-item-button:hover .ikonli-font-icon {
+    -fx-icon-color: #DC2626;
 }
 
 .items-scroll-pane {
@@ -446,4 +433,95 @@
 
     -fx-background-color: #FFEDD5;
 
+}
+
+
+/* =========================
+   DIALOGS
+   ========================= */
+
+.onelaunch-dialog {
+    -fx-background-color: white;
+}
+
+.onelaunch-dialog > *.header-panel {
+    -fx-background-color: white;
+}
+
+.onelaunch-dialog > *.header-panel *.label {
+    -fx-text-fill: #111827;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.onelaunch-dialog > *.content.label {
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 14px;
+}
+
+
+/* Primary dialog action */
+
+.dialog-primary-button {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-background-radius: 7px;
+    -fx-padding: 8px 18px;
+}
+
+.dialog-primary-button:hover {
+    -fx-background-color: #1D4ED8;
+}
+
+
+/* Destructive action */
+
+.dialog-danger-button {
+    -fx-background-color: #DC2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 7px;
+    -fx-padding: 8px 18px;
+}
+
+.dialog-danger-button:hover {
+    -fx-background-color: #B91C1C;
+}
+
+.dialog-danger-icon {
+    -fx-icon-color: #DC2626;
+}
+
+.dialog-warning-icon {
+    -fx-icon-color: #D97706;
+}
+
+
+/* Cancel / secondary action */
+
+.dialog-secondary-button {
+    -fx-background-color: white;
+    -fx-text-fill: #374151;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-padding: 8px 18px;
+}
+
+.dialog-secondary-button:hover {
+    -fx-background-color: #F3F4F6;
+}
+
+.dialog-warning-button {
+    -fx-background-color: #D97706;
+    -fx-text-fill: white;
+    -fx-background-radius: 7px;
+    -fx-padding: 8px 18px;
+}
+
+.dialog-warning-button:hover {
+    -fx-background-color: #B45309;
+}
+
+.dialog-info-icon {
+    -fx-icon-color: #2563EB;
 }

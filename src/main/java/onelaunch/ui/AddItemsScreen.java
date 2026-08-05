@@ -20,13 +20,18 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
+
+import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert.AlertType;
 import javafx.application.Platform;
 import javafx.scene.layout.Region;
 import onelaunch.util.DisplayNameUtil;
 import onelaunch.util.IconUtil;
 import javafx.scene.Node;
+import onelaunch.util.DialogUtil;
+import onelaunch.util.DialogUtil.ConfirmationStyle;
 
 public class AddItemsScreen {
 
@@ -207,14 +212,12 @@ public class AddItemsScreen {
         }
 
         if(!url.contains(".") && !url.equalsIgnoreCase("localhost")) {
-            Alert alert1 = new Alert(Alert.AlertType.WARNING);
-            alert1.setTitle(("Invalid Website"));
-            alert1.setHeaderText("Please enter a valid website.");
-            alert1.setContentText(
-        "Examples:\n" +
-        "youtube.com\n" +
-        "github.com\n");
-            alert1.showAndWait();
+            DialogUtil.showWarning(
+                "Invalid Website",
+                "Please enter a valid website URL.",
+                "Examples:\n• youtube.com\n• https://github.com"
+            );
+
             return;
         }
         if (!url.startsWith("http://") &&
@@ -234,16 +237,11 @@ public class AddItemsScreen {
     for (LaunchItem existingItem : items) {
 
         if (existingItem.getPath().equalsIgnoreCase(item.getPath())) {
-
-            Alert duplicateAlert = new Alert(Alert.AlertType.WARNING);
-
-            duplicateAlert.setTitle("Duplicate Item");
-            duplicateAlert.setHeaderText("This item has already been added.");
-            duplicateAlert.setContentText(
-                    "This item already exists in this workspace."
+            DialogUtil.showWarning(
+                "Duplicate Item", 
+                "This item has already been added.", 
+                "This item already exists in this workspace."
             );
-
-            duplicateAlert.showAndWait();
             return;
         }
     }
@@ -285,23 +283,23 @@ public class AddItemsScreen {
         Button backButton = new Button("← Back");
         //will check if any unsaved changes and then show previous screen
         backButton.setOnAction(e -> {
-            if (hasUnsavedChanges) {
-                // show confirmation dialog
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Unsaved Changes");
-                alert.setHeaderText("You have unsaved changes.");
-                alert.setContentText("Do you want to discard them?");
-                Optional<ButtonType> result = alert.showAndWait();
+            if (!hasUnsavedChanges) {
+                main.showHomeScreen();
+                return;
+            }
+            boolean discard = DialogUtil.showConfirmation(
+                "Unsaved Changes",
+                "You have unsaved changes.",
+                "Discard your changes and return to the home screen?",
+                "Discard",
+                "Keep Editing",
+                ConfirmationStyle.WARNING
+            );
 
-                if(result.orElse(ButtonType.CANCEL)== ButtonType.OK){
-                    main.showHomeScreen();
-                }
-                } else {
-                    // go home immediately
-                    main.showHomeScreen();
-                    }
-
-});
+            if(discard){
+                main.showHomeScreen();
+            }
+        });
 
         Pane spacer3 = new Pane();
         HBox.setHgrow(spacer3, Priority.ALWAYS);
@@ -334,11 +332,11 @@ public class AddItemsScreen {
 
         if (existingWorkspace.getName().equalsIgnoreCase(workspaceName)) {
 
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Duplicate Workspace");
-            alert.setHeaderText("A workspace with this name already exists.");
-            alert.setContentText("Please choose a different workspace name.");
-            alert.showAndWait();
+            DialogUtil.showWarning(
+                "Duplicate Workspace",
+                "A workspace with this name already exists.",
+                "Please choose a different workspace name."
+            );
             return;
         }
     }
@@ -456,22 +454,21 @@ public class AddItemsScreen {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button deleteButton = new Button("ⓧ");
+        Button deleteButton = new Button();
+        FontIcon deleteIcon = new FontIcon(FontAwesomeSolid.TIMES);
+        deleteIcon.setIconSize(14);
+        deleteButton.setGraphic(deleteIcon);
         deleteButton.getStyleClass().add("delete-item-button");
 
         deleteButton.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-
-            alert.setTitle("Delete Item");
-            alert.setHeaderText("Confirm Deletion");
-            alert.setContentText(
-            "Are you sure you want to remove \"" +
-            DisplayNameUtil.getDisplayName(item) +
-            "\"?");
-
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if(result.isPresent() && result.get() == ButtonType.OK){
+            boolean confirmed = DialogUtil.showConfirmation(
+                "Remove Item",
+                "Remove \"" + DisplayNameUtil.getDisplayName(item) + "\"?",
+                "This item will be removed from the workspace.",
+                "Remove",
+                "Cancel",
+                ConfirmationStyle.DANGER);
+            if(confirmed){
             items.remove(item);
             refreshItems();
             hasUnsavedChanges = true;
