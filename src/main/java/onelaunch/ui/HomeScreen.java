@@ -19,6 +19,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import onelaunch.model.LaunchItem;
 import onelaunch.util.DisplayNameUtil;
+import onelaunch.util.IconUtil;
 
 public class HomeScreen {
 
@@ -56,8 +57,12 @@ public class HomeScreen {
             main.showAddWorkspaceScreen();
         });
 
-        Button settingsButton = new Button("⚙");
+        Button settingsButton = new Button();
+        settingsButton.setGraphic(IconUtil.getInfoIcon(18));
         settingsButton.getStyleClass().add("menu-button");
+        settingsButton.setOnAction(e -> {
+            main.showAboutDialog();
+        });
 
         Region spacer = new Region();
         spacer.setMinWidth(25);

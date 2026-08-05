@@ -130,6 +130,25 @@ public class Main extends Application {
             }
         }
     }
+    public void showAboutDialog() {
+
+    Alert alert = new Alert(AlertType.INFORMATION);
+
+    alert.setTitle("About OneLaunch");
+
+    alert.setHeaderText("OneLaunch");
+
+    alert.setContentText(
+        "Launch your workspace with one click.\n\n" +
+        "Version 1.0\n\n" +
+        "Built with Java & JavaFX\n\n" +
+        "© 2026 Prithviraj Sarkar"
+    );
+
+    alert.initOwner(stage);
+
+    alert.showAndWait();
+    }
     public static void main(String[] args) {
         launch(args);
     }

@@ -45,4 +45,71 @@ public final class IconUtil {
 
         return icon;
     }
+    public static Node getSearchIcon(int size) {
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.SEARCH);
+    icon.setIconSize(size);
+    icon.setIconColor(Color.web("#9CA3AF"));
+
+    return icon;
+}
+
+public static Node getFolderIcon(int size) {
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.FOLDER);
+
+    icon.setIconSize(size);
+    icon.setIconColor(Color.web("#D97706"));
+
+    return icon;
+}
+
+public static Node getPlayIcon(int size) {
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.PLAY);
+
+    icon.setIconSize(size);
+    icon.setIconColor(Color.WHITE);
+
+    return icon;
+}
+
+public static Node getSettingsIcon(int size) {
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.COG);
+
+    icon.setIconSize(size);
+    icon.setIconColor(Color.web("#4B5563"));
+
+    return icon;
+}
+
+public static Node getPlusIcon(int size) {
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.PLUS);
+
+    icon.setIconSize(size);
+    icon.setIconColor(Color.WHITE);
+
+    return icon;
+}
+
+public static Node getMoreIcon(int size) {
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.ELLIPSIS_V);
+
+    icon.setIconSize(size);
+    icon.setIconColor(Color.web("#4B5563"));
+
+    return icon;
+}
+public static Node getInfoIcon(int size) {
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.INFO_CIRCLE);
+
+    icon.setIconSize(size);
+    icon.setIconColor(Color.web("#4B5563"));
+
+    return icon;
+}
 }
