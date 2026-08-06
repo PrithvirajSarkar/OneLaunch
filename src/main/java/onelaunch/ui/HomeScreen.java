@@ -1,13 +1,10 @@
 package onelaunch.ui;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import onelaunch.service.StorageManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;

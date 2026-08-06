@@ -1,11 +1,9 @@
 package onelaunch.ui;
 
-import java.util.Optional;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Alert.AlertType;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import onelaunch.model.LaunchItem;
@@ -17,6 +15,17 @@ import java.net.URI;
 import java.io.File;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.Parent;
+
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 
 
 public class Main extends Application {
@@ -120,13 +129,16 @@ public class Main extends Application {
 }
             } catch (Exception e) {
                 
-                Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.setTitle("Launch Error");
-                alert.setHeaderText("Couldn't launch \"" + item.getName() + "\"");
-                alert.setContentText("Continue launching the remaining items?");
-                Optional<ButtonType> result = alert.showAndWait();
+                boolean continueLaunching = DialogUtil.showConfirmation(
+                    "Launch Error", 
+                    "Couldn't launch \"" + item.getName() + "\"", 
+                    "Continue launching the remaining items?", 
+                    "Continue", 
+                    "Stop", 
+                    DialogUtil.ConfirmationStyle.WARNING
+                );
 
-                if(result.orElse(ButtonType.CANCEL) == ButtonType.CANCEL){
+                if(!continueLaunching){
                 return;
                 }
             }
@@ -134,23 +146,88 @@ public class Main extends Application {
     }
     public void showAboutDialog() {
 
-    Alert alert = new Alert(AlertType.INFORMATION);
+    Dialog<Void> dialog = new Dialog<>();
 
-    alert.setTitle("About OneLaunch");
+    dialog.setTitle("About OneLaunch");
+    dialog.initOwner(stage);
 
-    alert.setHeaderText("OneLaunch");
+    DialogPane dialogPane = dialog.getDialogPane();
 
-    alert.setContentText(
-        "Launch your workspace with one click.\n\n" +
-        "Version 1.0\n\n" +
-        "Built with Java & JavaFX\n\n" +
-        "© 2026 Prithviraj Sarkar"
+    dialogPane.getStylesheets().add(
+        getClass().getResource("/style.css").toExternalForm()
     );
 
-    alert.initOwner(stage);
+    dialogPane.getStyleClass().add("about-dialog");
 
-    alert.showAndWait();
+    // OneLaunch icon
+    FontIcon appIcon = new FontIcon(FontAwesomeSolid.ROCKET);
+    appIcon.setIconSize(32);
+    appIcon.getStyleClass().add("about-app-icon");
+
+    // App name
+    Label appName = new Label("OneLaunch");
+    appName.getStyleClass().add("about-app-name");
+
+    // Tagline
+    Label tagline = new Label("Launch your workspace with one click.");
+    tagline.getStyleClass().add("about-tagline");
+
+    VBox titleBox = new VBox(3, appName, tagline);
+
+    HBox header = new HBox(14, appIcon, titleBox);
+    header.setAlignment(Pos.CENTER_LEFT);
+
+    // Version badge
+    Label versionLabel = new Label("Version");
+    versionLabel.getStyleClass().add("about-detail-label");
+
+    Label versionValue = new Label("1.0");
+
+    // Technology
+    Label builtLabel = new Label("Built with");
+    builtLabel.getStyleClass().add("about-detail");
+
+    Label builtValue = new Label("Java & JavaFX");
+
+    GridPane details = new GridPane();
+    details.setHgap(35);
+    details.setVgap(10);
+
+    details.add(versionLabel, 0, 0);
+    details.add(versionValue, 1, 0);
+    details.add(builtLabel, 0, 1);
+    details.add(builtValue, 1, 1);
+
+    // Copyright
+    Label copyright = new Label("© 2026 Prithviraj Sarkar");
+    copyright.getStyleClass().add("about-copyright");
+
+    VBox content = new VBox(
+        22,
+        header,
+        details,
+        copyright
+    );
+
+    content.getStyleClass().add("about-content");
+
+    dialogPane.setContent(content);
+
+    ButtonType closeButton = new ButtonType(
+        "Close",
+        ButtonBar.ButtonData.CANCEL_CLOSE
+    );
+
+    dialogPane.getButtonTypes().add(closeButton);
+
+    Button close = (Button) dialogPane.lookupButton(closeButton);
+    close.getStyleClass().add("dialog-primary-button");
+
+    dialog.showAndWait();
     }
+
+
+
     public static void main(String[] args) {
         launch(args);
     }

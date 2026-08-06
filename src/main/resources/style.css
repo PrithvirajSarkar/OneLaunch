@@ -525,3 +525,61 @@
 .dialog-info-icon {
     -fx-icon-color: #2563EB;
 }
+
+
+/* =========================
+   ABOUT DIALOG
+   ========================= */
+
+.about-dialog {
+    -fx-background-color: white;
+}
+
+.about-content {
+    -fx-padding: 22 24 12 24;
+    -fx-pref-width: 360px;
+}
+
+.about-app-icon {
+    -fx-icon-color: #2563EB;
+}
+
+.about-app-name {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.about-tagline {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.about-detail-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+.about-copyright {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9CA3AF;
+}
+
+.about-dialog > .button-bar > .container {
+    -fx-padding: 8 20 16 20;
+}
+
+.dialog-website-button {
+    -fx-background-color: #EFF6FF;
+    -fx-text-fill: #2563EB;
+    -fx-border-color: #93C5FD;
+    -fx-border-width: 1;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-padding: 8px 18px;
+}
+
+.dialog-website-button:hover {
+    -fx-background-color: #DBEAFE;
+    -fx-border-color: #2563EB;
+}

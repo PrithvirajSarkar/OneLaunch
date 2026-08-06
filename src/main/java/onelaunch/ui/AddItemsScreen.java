@@ -17,8 +17,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import java.util.Optional;
 
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
@@ -106,11 +104,17 @@ public class AddItemsScreen {
             Optional<String> result = dialog.showAndWait();
             if(result.isPresent()){
                 String newName = result.get().trim();
-                if (!newName.isEmpty()) {
-                    workspaceName = newName;
-                    workspaceLabel.setText(newName);
-                    hasUnsavedChanges = true;
+                if (newName.isEmpty()) {
+                    DialogUtil.showWarning(
+                        "Invalid Workspace Name", 
+                        "Workspace name cannot be empty.", 
+                        "Please enter a workspace name."
+                    );
+                    return;
                 }
+                workspaceName = newName;
+                workspaceLabel.setText(newName);
+                hasUnsavedChanges = true;
             }
 
         });
@@ -149,30 +153,15 @@ public class AddItemsScreen {
         addItemButton.getStyleClass().add("add-item-button");
         //it will open file chooser 
         addItemButton.setOnAction(e -> {
-
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    alert.setTitle("Add Item");
-    alert.setHeaderText("Choose what you want to add.");
-
-    ButtonType browseButton = new ButtonType("Browse");
-    ButtonType websiteButton = new ButtonType("Website");
-
-    alert.getButtonTypes().setAll(
-            browseButton,
-            websiteButton,
-            ButtonType.CANCEL
-    );
-
-    Optional<ButtonType> result = alert.showAndWait();
-
-    if (result.isEmpty() || result.get() == ButtonType.CANCEL) {
-        return;
-    }
+            DialogUtil.ItemChoice choice = DialogUtil.showItemChoice();
+            if (choice == DialogUtil.ItemChoice.CANCEL) {
+                return;
+            }
 
     LaunchItem item = null;
 
     // Browse
-    if (result.get() == browseButton) {
+    if (choice == DialogUtil.ItemChoice.BROWSE) {
 
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(main.getStage());
@@ -191,15 +180,9 @@ public class AddItemsScreen {
     }
 
     // Website
-    else if (result.get() == websiteButton) {
+    else if (choice == DialogUtil.ItemChoice.WEBSITE) {
 
-        TextInputDialog dialog = new TextInputDialog("https://");
-
-        dialog.setTitle("Add Website");
-        dialog.setHeaderText("Enter Website URL");
-        dialog.setContentText("URL:");
-
-        Optional<String> websiteResult = dialog.showAndWait();
+        Optional<String> websiteResult = DialogUtil.showWebsiteInput();
 
         if (websiteResult.isEmpty()) {
             return;
@@ -250,7 +233,8 @@ public class AddItemsScreen {
     // Add Item
     items.add(item);
     refreshItems();
-    hasUnsavedChanges = true;});
+    hasUnsavedChanges = true;
+    });
 
 
         itemsHeader.getChildren().addAll(
@@ -313,11 +297,11 @@ public class AddItemsScreen {
 
     if (workspaceName.isEmpty()) {
 
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Empty Workspace Name");
-        alert.setHeaderText("Workspace name cannot be empty.");
-        alert.setContentText("Please enter a workspace name.");
-        alert.showAndWait();
+        DialogUtil.showWarning(
+            "Empty Workspace Name", 
+            "Workspace name cannot be empty.", 
+            "Please enter a workspace name."
+        );
         return;
     }
 
