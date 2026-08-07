@@ -176,7 +176,7 @@ public class HomeScreen {
 
     Label subtitle = new Label(
             "Create your first workspace to launch everything\n"
-          + "with a single click."
+          + "                         with a single click.                "
     );
     subtitle.getStyleClass().add("preview-label");
     subtitle.setAlignment(Pos.CENTER);
