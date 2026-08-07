@@ -53,13 +53,28 @@
 
 /* Success */
 
-.success-button {
+.button.success-button {
     -fx-background-color: #2E8B57;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.button.success-button .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.button.success-button:hover {
+    -fx-background-color: #256F46;
     -fx-text-fill: white;
 }
 
-.success-button:hover {
-    -fx-background-color: #256F46;
+.button.success-button:hover .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.button.success-button:pressed {
+    -fx-background-color: #1F5F3C;
+    -fx-text-fill: white;
 }
 
 /* Danger */

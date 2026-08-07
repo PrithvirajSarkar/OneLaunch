@@ -20,6 +20,14 @@ import onelaunch.util.IconUtil;
 import onelaunch.util.DialogUtil;
 import onelaunch.util.DialogUtil.ConfirmationStyle;
 
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
+import javafx.animation.ParallelTransition;
+import javafx.util.Duration;
+
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
+
 public class HomeScreen {
 
     private Main main;
@@ -225,11 +233,34 @@ public class HomeScreen {
         previewLabel.getStyleClass().add("preview-label");
 
         //Launch
-        Button launchButton = new Button("▶ Launch");
+        FontIcon launchIcon = new FontIcon(FontAwesomeSolid.ROCKET);
+        launchIcon.setIconSize(14);
+
+        Button launchButton = new Button("Launch");
+        launchButton.setGraphic(launchIcon);
+        launchButton.setGraphicTextGap(7);
+
         launchButton.setPrefHeight(38);
         launchButton.getStyleClass().add("success-button");
+
         launchButton.setOnAction(e -> {
+            ScaleTransition buttonPress = new ScaleTransition(Duration.millis(100), launchButton);
+            buttonPress.setToX(0.97);
+            buttonPress.setToY(0.97);
+
+            TranslateTransition rocketLaunch = new TranslateTransition(Duration.millis(100),launchIcon);
+            rocketLaunch.setToX(5);
+            rocketLaunch.setToY(-3);
+
+            ParallelTransition launchAnimation = new ParallelTransition(buttonPress, rocketLaunch);
+            launchAnimation.setAutoReverse(true);
+            launchAnimation.setCycleCount(2);
+
+            launchAnimation.setOnFinished(event -> {
             main.launchWorkspace(workspace);
+            });
+
+            launchAnimation.play();
         });
 
         //Edit
