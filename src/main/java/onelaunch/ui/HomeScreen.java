@@ -22,6 +22,7 @@ import onelaunch.util.DialogUtil.ConfirmationStyle;
 
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.animation.ParallelTransition;
 import javafx.util.Duration;
 
@@ -257,7 +258,7 @@ public class HomeScreen {
             launchAnimation.setCycleCount(2);
 
             launchAnimation.setOnFinished(event -> {
-            main.launchWorkspace(workspace);
+            Platform.runLater(() -> main.launchWorkspace(workspace));
             });
 
             launchAnimation.play();

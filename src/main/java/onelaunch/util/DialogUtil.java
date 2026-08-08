@@ -13,6 +13,11 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TextField;
 
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import javafx.application.Platform;
+
 public final class DialogUtil {
 
     public enum ConfirmationStyle {
@@ -68,6 +73,8 @@ public final class DialogUtil {
 
         alert.setGraphic(icon);
 
+        setDialogIcon(alert);
+
         DialogPane dialogPane = alert.getDialogPane();
 
         dialogPane.getStylesheets().add(
@@ -120,6 +127,8 @@ public final class DialogUtil {
 
     alert.setGraphic(icon);
 
+    setDialogIcon(alert);
+
     DialogPane dialogPane = alert.getDialogPane();
 
     dialogPane.getStylesheets().add(
@@ -162,6 +171,8 @@ public final class DialogUtil {
 
     alert.setGraphic(icon);
 
+    setDialogIcon(alert);
+
     DialogPane dialogPane = alert.getDialogPane();
 
     dialogPane.getStylesheets().add(
@@ -190,6 +201,8 @@ public final class DialogUtil {
     icon.getStyleClass().add("dialog-info-icon");
 
     alert.setGraphic(icon);
+
+    setDialogIcon(alert);
 
     ButtonType browseButton = new ButtonType(
         "Browse",
@@ -262,6 +275,8 @@ public final class DialogUtil {
 
     dialog.setGraphic(icon);
 
+    setDialogIcon(dialog);
+
     DialogPane dialogPane = dialog.getDialogPane();
 
     dialogPane.getStylesheets().add(
@@ -290,5 +305,53 @@ public final class DialogUtil {
     }
 
     return Optional.of(result.get().trim());
+    }
+
+
+
+
+    private static void setDialogIcon(Alert alert) {
+
+    alert.setOnShown( e -> {
+
+        Platform.runLater(() -> {
+
+        Stage dialodStage =(Stage) alert.getDialogPane()
+                        .getScene()
+                        .getWindow();
+
+        Image appIcon = new Image(
+                DialogUtil.class
+                        .getResourceAsStream("/onelaunch-icon.png")
+        );
+
+        dialodStage.getIcons().setAll(appIcon);
+    });
+    });
+    }
+
+
+
+
+    public static void setDialogIcon(TextInputDialog dialog) {
+        dialog.addEventHandler(
+        javafx.scene.control.DialogEvent.DIALOG_SHOWN,
+        e -> {
+
+            Platform.runLater(() -> {
+
+                Stage dialStage = (Stage) dialog.getDialogPane()
+                        .getScene()
+                        .getWindow();
+
+                Image appIcon = new Image(
+                        DialogUtil.class
+                                .getResourceAsStream("/onelaunch-icon.png")
+                );
+
+                dialStage.getIcons().setAll(appIcon);
+            });
+        }
+    );
     }
 }

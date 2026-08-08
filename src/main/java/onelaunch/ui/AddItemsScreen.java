@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+
 import java.util.Optional;
 
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
@@ -30,6 +31,7 @@ import onelaunch.util.IconUtil;
 import javafx.scene.Node;
 import onelaunch.util.DialogUtil;
 import onelaunch.util.DialogUtil.ConfirmationStyle;
+
 
 public class AddItemsScreen {
 
@@ -98,9 +100,16 @@ public class AddItemsScreen {
         editButton.getStyleClass().add("rename-button");
         editButton.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog(workspaceName);
+
             dialog.setTitle("Rename Workspace");
             dialog.setHeaderText("Workspace Name");
-            dialog.setOnShown(e2 -> dialog.getEditor().selectAll());            
+
+            DialogUtil.setDialogIcon(dialog);
+
+            dialog.setOnShown(e2 -> {
+                dialog.getEditor().selectAll();
+            });
+
             Optional<String> result = dialog.showAndWait();
             if(result.isPresent()){
                 String newName = result.get().trim();
@@ -325,6 +334,11 @@ public class AddItemsScreen {
         }
     }
         Workspace workspace = new Workspace(workspaceName);
+
+        // Preserve the existing pin state when editing a workspace.
+        if (isEditMode && originalWorkspace != null) {
+            workspace.setPinned(originalWorkspace.isPinned());
+        }
 
         for (LaunchItem item : items) {
 

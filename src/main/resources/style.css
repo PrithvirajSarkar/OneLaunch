@@ -598,3 +598,14 @@
     -fx-background-color: #DBEAFE;
     -fx-border-color: #2563EB;
 }
+
+.about-app-logo {
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0, 0, 0, 0.12),
+        4,
+        0,
+        0,
+        1
+    );
+}

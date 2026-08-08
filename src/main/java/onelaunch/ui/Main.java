@@ -25,10 +25,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 
-import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
-
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 
 public class Main extends Application {
@@ -99,15 +97,12 @@ public class Main extends Application {
     }
 
     public void showEditWorkspaceScreen(Workspace workspace){
-        System.out.println("Editing: " + workspace.getName());
-        System.out.println(workspace.getItems());
         scene.setRoot(new AddItemsScreen(this, workspace,true).create());
     }
 
     public void launchWorkspace(Workspace workspace) {
-        System.out.println("Launching: " + workspace.getName());
-        System.out.println(workspace.getItems());
         if (workspace.getItems().isEmpty()) {
+
             // Show alert
             DialogUtil.showInfo(
                 "Empty Workspace", 
@@ -171,9 +166,14 @@ public class Main extends Application {
     dialogPane.getStyleClass().add("about-dialog");
 
     // OneLaunch icon
-    FontIcon appIcon = new FontIcon(FontAwesomeSolid.ROCKET);
-    appIcon.setIconSize(32);
-    appIcon.getStyleClass().add("about-app-icon");
+    Image logoImage = new Image(
+        getClass().getResourceAsStream("/onelaunch-icon.png")
+    );
+    ImageView appIcon = new ImageView(logoImage);
+    appIcon.setFitWidth(42);
+    appIcon.setFitHeight(42);
+    appIcon.setPreserveRatio(true);
+    appIcon.getStyleClass().add("about-app-logo");
 
     // App name
     Label appName = new Label("OneLaunch");
