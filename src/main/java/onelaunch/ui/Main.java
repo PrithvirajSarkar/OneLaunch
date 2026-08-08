@@ -11,6 +11,7 @@ import onelaunch.model.Workspace;
 import onelaunch.util.DialogUtil;
 
 import java.awt.Desktop;
+
 import java.net.URI;
 import java.io.File;
 import javafx.scene.control.ScrollPane;
@@ -27,6 +28,8 @@ import javafx.scene.control.Label;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 
+import javafx.scene.image.Image;
+
 
 public class Main extends Application {
 
@@ -40,9 +43,17 @@ public class Main extends Application {
         VBox root = new HomeScreen(this).create();
 
         scene = new Scene(wrapInScrollPane(root),900,600);
+
+
         scene.getStylesheets().add(
             getClass().getResource("/style.css").toExternalForm()
         );
+
+        Image appIcon = new Image(
+            getClass().getResourceAsStream("/onelaunch-icon.png")
+        );
+
+        stage.getIcons().add(appIcon);
 
         stage.setTitle("OneLaunch");
         stage.setScene(scene);
