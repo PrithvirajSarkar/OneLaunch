@@ -28,12 +28,19 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import onelaunch.service.SettingsManager;
+
 
 public class Main extends Application {
 
     private Scene scene;
     private Stage stage;
     private boolean darkMode = false;
+    private SettingsManager settingsManager = new SettingsManager();
+
+    private String getDarkStylesheet() {
+    return getClass().getResource("/dark.css").toExternalForm();
+    }
 
     @Override
     public void start(Stage stage) {
@@ -48,13 +55,22 @@ public class Main extends Application {
             getClass().getResource("/style.css").toExternalForm()
         );
 
-        System.setProperty("onelaunch.darkMode", "false");
+        darkMode = settingsManager.loadDarkMode();
+
+        System.setProperty(
+            "onelaunch.darkMode",
+            String.valueOf(darkMode)
+        );
+
+        if(darkMode){
+            scene.getStylesheets().add(getDarkStylesheet());
+        }
 
         Image appIcon = new Image(
             getClass().getResourceAsStream("/onelaunch-icon.png")
         );
 
-        stage.getIcons().add(appIcon);
+        stage.getIcons().add(appIcon); 
 
         stage.setTitle("OneLaunch");
         stage.setScene(scene);
@@ -73,8 +89,7 @@ public class Main extends Application {
 
     darkMode = !darkMode;
 
-    String darkStylesheet =
-        getClass().getResource("/dark.css").toExternalForm();
+    String darkStylesheet = getDarkStylesheet();
 
     if (darkMode) {
         System.setProperty("onelaunch.darkMode", "true");
@@ -87,6 +102,8 @@ public class Main extends Application {
 
         scene.getStylesheets().remove(darkStylesheet);
         }
+
+        settingsManager.saveDarkMode(darkMode);
     }
 
     private ScrollPane wrapInScrollPane(Parent content) {
