@@ -1,0 +1,382 @@
+/* =========================================================
+   OneLaunch - Dark Theme
+   ========================================================= */
+
+.root {
+    -fx-background-color: #0F172A;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+}
+
+/* ---------------------------
+   Labels
+   ---------------------------- */
+
+.title-label {
+    -fx-text-fill: #F9FAFB;
+}
+
+.subtitle-label {
+    -fx-text-fill: #E5E7EB;
+}
+
+.subtitle-label.workspace-name {
+    -fx-text-fill: #60A5FA;
+}
+
+.page-title {
+    -fx-text-fill: #F9FAFB;
+}
+
+.form-label {
+    -fx-text-fill: #E5E7EB;
+}
+
+.helper-text,
+.preview-label {
+    -fx-text-fill: #9CA3AF;
+}
+
+.section-heading {
+    -fx-text-fill: #9CA3AF;
+}
+
+.item-name {
+    -fx-text-fill: #E5E7EB;
+}
+
+/* ---------------------------
+   Secondary Buttons
+   ---------------------------- */
+
+.secondary-button {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #374151;
+    -fx-text-fill: #E5E7EB;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #374151;
+}
+
+/* ---------------------------
+   Workspace Cards
+   ---------------------------- */
+
+.workspace-card {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #374151;
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.35),
+        8,
+        0,
+        0,
+        3
+    );
+}
+
+.workspace-card:hover {
+    -fx-background-color: #273449;
+    -fx-border-color: #4B5563;
+}
+
+/* ---------------------------
+   Search
+   ---------------------------- */
+
+.search-field {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #374151;
+    -fx-text-fill: #F9FAFB;
+    -fx-prompt-text-fill: #6B7280;
+}
+
+.search-field:focused {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #3B82F6;
+}
+
+/* ---------------------------
+   Text Fields
+   ---------------------------- */
+
+.text-field {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #374151;
+    -fx-text-fill: #F9FAFB;
+    -fx-prompt-text-fill: #6B7280;
+}
+
+.text-field:focused {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #3B82F6;
+}
+
+/* ---------------------------
+   Menu Button
+   ---------------------------- */
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #F9FAFB;
+    -fx-font-size: 20px;
+    -fx-padding: 6 12;
+}
+
+.menu-button .label {
+    -fx-text-fill: #F9FAFB;
+}
+
+.menu-button:hover {
+    -fx-background-color: #374151;
+    -fx-background-radius: 8;
+}
+
+.menu-button .arrow {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+/* ---------------------------
+   Form Card
+   ---------------------------- */
+
+.form-card {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #374151;
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.35),
+        10,
+        0,
+        0,
+        3
+    );
+}
+
+/* ---------------------------
+   Item Rows
+   ---------------------------- */
+
+.item-row {
+    -fx-border-color: #374151;
+}
+
+.item-row:hover {
+    -fx-background-color: #273449;
+}
+
+/* ---------------------------
+   Add Item
+   ---------------------------- */
+
+.add-item-button {
+    -fx-background-color: #172554;
+    -fx-border-color: #3B82F6;
+    -fx-text-fill: #60A5FA;
+}
+
+.add-item-button:hover {
+    -fx-background-color: #1E3A8A;
+}
+
+/* ---------------------------
+   Rename
+   ---------------------------- */
+
+.rename-button {
+    -fx-background-color: #422006;
+    -fx-border-color: #FBBF24;
+    -fx-text-fill: #FBBF24;
+}
+
+.rename-button:hover {
+    -fx-background-color: #713F12;
+}
+
+/* ---------------------------
+   Scrollbars
+   ---------------------------- */
+
+.items-scroll-pane,
+.items-scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #4B5563;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #6B7280;
+}
+
+/* ---------------------------
+   Dialogs
+   ---------------------------- */
+
+.onelaunch-dialog {
+    -fx-background-color: #1F2937;
+}
+
+.onelaunch-dialog > .header-panel {
+    -fx-background-color: #1F2937;
+}
+
+.onelaunch-dialog > .header-panel .label {
+    -fx-text-fill: #F9FAFB;
+}
+
+.onelaunch-dialog > .content {
+    -fx-background-color: #1F2937;
+}
+
+.onelaunch-dialog > .content .label {
+    -fx-text-fill: #D1D5DB;
+}
+
+.onelaunch-dialog > .button-bar {
+    -fx-background-color: #1F2937;
+}
+
+.onelaunch-dialog .text-field {
+    -fx-background-color: #111827;
+    -fx-text-fill: #F9FAFB;
+    -fx-prompt-text-fill: #6B7280;
+    -fx-border-color: #4B5563;
+}
+
+.onelaunch-dialog .text-field:focused {
+    -fx-background-color: #111827;
+    -fx-border-color: #3B82F6;
+}
+
+.dialog-secondary-button {
+    -fx-background-color: #1F2937;
+    -fx-text-fill: #E5E7EB;
+    -fx-border-color: #4B5563;
+}
+
+.dialog-secondary-button:hover {
+    -fx-background-color: #374151;
+}
+
+
+/* ---------------------------
+   About Dialog
+   ---------------------------- */
+
+.about-dialog {
+    -fx-background-color: #1F2937;
+}
+
+.about-app-name {
+    -fx-text-fill: #F9FAFB;
+}
+
+.about-tagline {
+    -fx-text-fill: #9CA3AF;
+}
+
+.about-detail-label {
+    -fx-text-fill: #9CA3AF;
+}
+
+.about-copyright {
+    -fx-text-fill: #6B7280;
+}
+
+.about-content .label {
+    -fx-text-fill: #E5E7EB;
+}
+/* ---------------------------
+   Menu Items
+   ---------------------------- */
+
+.context-menu {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #374151;
+}
+
+.menu-item {
+    -fx-background-color: #1F2937;
+}
+
+.menu-item .label {
+    -fx-text-fill: #E5E7EB;
+}
+
+.menu-item:hover {
+    -fx-background-color: #374151;
+}
+
+.theme-button {
+    -fx-background-color: transparent;
+}
+
+.theme-button .ikonli-font-icon {
+    -fx-icon-color: #D1D5DB;
+}
+
+.theme-button:hover {
+    -fx-background-color: #374151;
+}
+
+.theme-button:hover .ikonli-font-icon {
+    -fx-icon-color: #F9FAFB;
+}
+
+.main-scroll-pane {
+    -fx-background-color: #0F172A;
+}
+
+.main-scroll-pane > .viewport {
+    -fx-background-color: #0F172A;
+}
+
+.main-scroll-pane > .corner {
+    -fx-background-color: #0F172A;
+}
+
+.home-root{
+    -fx-background-color: #0F172A;
+}
+
+.about-detail {
+    -fx-text-fill: #E5E7EB;
+}
+
+.onelaunch-dialog .text-field {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #4B5563;
+    -fx-text-fill: #F9FAFB;
+    -fx-prompt-text-fill: #6B7280;
+}
+
+.onelaunch-dialog .text-field:focused {
+    -fx-background-color: #1F2937;
+    -fx-border-color: #3B82F6;
+}
+
+.main-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: #0F172A;
+}
+
+.main-scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.main-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #4B5563;
+    -fx-background-radius: 100;
+}
+
+.main-scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #6B7280;
+}
+

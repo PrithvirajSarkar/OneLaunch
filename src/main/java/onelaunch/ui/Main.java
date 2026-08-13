@@ -33,6 +33,7 @@ public class Main extends Application {
 
     private Scene scene;
     private Stage stage;
+    private boolean darkMode = false;
 
     @Override
     public void start(Stage stage) {
@@ -46,6 +47,8 @@ public class Main extends Application {
         scene.getStylesheets().add(
             getClass().getResource("/style.css").toExternalForm()
         );
+
+        System.setProperty("onelaunch.darkMode", "false");
 
         Image appIcon = new Image(
             getClass().getResourceAsStream("/onelaunch-icon.png")
@@ -62,11 +65,36 @@ public class Main extends Application {
     return stage;
     }
 
+    public boolean isDarkMode(){
+        return darkMode;
+    }
+
+    public void toggleDarkMode() {
+
+    darkMode = !darkMode;
+
+    String darkStylesheet =
+        getClass().getResource("/dark.css").toExternalForm();
+
+    if (darkMode) {
+        System.setProperty("onelaunch.darkMode", "true");
+
+        if (!scene.getStylesheets().contains(darkStylesheet)) {
+            scene.getStylesheets().add(darkStylesheet);
+        }
+    } else {
+            System.setProperty("onelaunch.darkMode", "false");
+
+        scene.getStylesheets().remove(darkStylesheet);
+        }
+    }
 
     private ScrollPane wrapInScrollPane(Parent content) {
 
     ScrollPane scrollPane = new ScrollPane(content);
 
+    scrollPane.getStyleClass().add("main-scroll-pane");
+    
     scrollPane.setFitToWidth(true);
 
     scrollPane.setFitToHeight(true);
@@ -162,6 +190,12 @@ public class Main extends Application {
     dialogPane.getStylesheets().add(
         getClass().getResource("/style.css").toExternalForm()
     );
+
+    if(darkMode){
+        dialogPane.getStylesheets().add(
+            getClass().getResource("/dark.css").toExternalForm()
+        );
+    }
 
     dialogPane.getStyleClass().add("about-dialog");
 

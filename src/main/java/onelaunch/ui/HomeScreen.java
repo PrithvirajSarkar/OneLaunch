@@ -52,6 +52,8 @@ public class HomeScreen {
 
         VBox root = new VBox();
 
+        root.getStyleClass().add("home-root");
+
         root.setSpacing(18);
         root.setPadding(new Insets(30));
 
@@ -65,11 +67,30 @@ public class HomeScreen {
             main.showAddWorkspaceScreen();
         });
 
-        Button settingsButton = new Button();
-        settingsButton.setGraphic(IconUtil.getInfoIcon(18));
-        settingsButton.getStyleClass().add("menu-button");
-        settingsButton.setOnAction(e -> {
+        Button aboutButton = new Button();
+        aboutButton.setGraphic(IconUtil.getInfoIcon(18));
+        aboutButton.getStyleClass().add("menu-button");
+        aboutButton.setOnAction(e -> {
             main.showAboutDialog();
+        });
+
+        Button themeButton = new Button();
+
+        FontIcon themeIcon = new FontIcon(
+            main.isDarkMode() ? FontAwesomeSolid.SUN : FontAwesomeSolid.MOON
+        );
+
+        themeIcon.setIconSize(18);
+
+        themeButton.setGraphic(themeIcon);
+        themeButton.getStyleClass().add("theme-button");
+
+        themeButton.setOnAction(e -> {
+            main.toggleDarkMode();
+
+            themeIcon.setIconCode(
+                main.isDarkMode() ? FontAwesomeSolid.SUN : FontAwesomeSolid.MOON
+            );
         });
 
         Region spacer = new Region();
@@ -84,7 +105,8 @@ public class HomeScreen {
                 title,
                 spacer,
                 addWorkspaceButton,
-                settingsButton
+                themeButton,
+                aboutButton
         );
 
         TextField searchField = new TextField();

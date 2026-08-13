@@ -609,3 +609,39 @@
         1
     );
 }
+
+
+.theme-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4B5563;
+    -fx-padding: 8px;
+    -fx-background-radius: 8px;
+}
+
+.theme-button .ikonli-font-icon {
+    -fx-icon-color: #4B5563;
+}
+
+.theme-button:hover {
+    -fx-background-color: #EAEAEA;
+}
+
+.theme-button:hover .ikonli-font-icon {
+    -fx-icon-color: #111827;
+}
+
+.main-scroll-pane {
+    -fx-background-color: #F4F4F4;
+}
+
+.main-scroll-pane > .viewport {
+    -fx-background-color: #F4F4F4;
+}
+
+.main-scroll-pane > .corner {
+    -fx-background-color: #F4F4F4;
+}
+
+.home-root {
+    -fx-background-color: #F4F4F4;
+}

@@ -10,6 +10,7 @@ import onelaunch.service.StorageManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -105,6 +106,13 @@ public class AddItemsScreen {
             dialog.setHeaderText("Workspace Name");
 
             DialogUtil.setDialogIcon(dialog);
+            DialogUtil.applyDialogTheme(dialog.getDialogPane());
+
+            Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            Button cancelButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
+
+            okButton.getStyleClass().add("dialog-primary-button");
+            cancelButton.getStyleClass().add("dialog-secondary-button");
 
             dialog.setOnShown(e2 -> {
                 dialog.getEditor().selectAll();

@@ -77,11 +77,7 @@ public final class DialogUtil {
 
         DialogPane dialogPane = alert.getDialogPane();
 
-        dialogPane.getStylesheets().add(
-                DialogUtil.class.getResource("/style.css").toExternalForm()
-        );
-
-        dialogPane.getStyleClass().add("onelaunch-dialog");
+        applyDialogTheme(dialogPane);
 
         Button confirm = (Button) dialogPane.lookupButton(confirmButton);
         Button cancel = (Button) dialogPane.lookupButton(cancelButton);
@@ -131,11 +127,7 @@ public final class DialogUtil {
 
     DialogPane dialogPane = alert.getDialogPane();
 
-    dialogPane.getStylesheets().add(
-            DialogUtil.class.getResource("/style.css").toExternalForm()
-    );
-
-    dialogPane.getStyleClass().add("onelaunch-dialog");
+    applyDialogTheme(dialogPane);
 
     Button gotIt = (Button) dialogPane.lookupButton(gotItButton);
     gotIt.getStyleClass().add("dialog-warning-button");
@@ -175,11 +167,7 @@ public final class DialogUtil {
 
     DialogPane dialogPane = alert.getDialogPane();
 
-    dialogPane.getStylesheets().add(
-            DialogUtil.class.getResource("/style.css").toExternalForm()
-    );
-
-    dialogPane.getStyleClass().add("onelaunch-dialog");
+    applyDialogTheme(dialogPane);
 
     Button gotIt = (Button) dialogPane.lookupButton(gotItButton);
     gotIt.getStyleClass().add("dialog-primary-button");
@@ -227,11 +215,7 @@ public final class DialogUtil {
 
     DialogPane dialogPane = alert.getDialogPane();
 
-    dialogPane.getStylesheets().add(
-        DialogUtil.class.getResource("/style.css").toExternalForm()
-    );
-
-    dialogPane.getStyleClass().add("onelaunch-dialog");
+    applyDialogTheme(dialogPane);
 
     Button browse = (Button) dialogPane.lookupButton(browseButton);
     Button website = (Button) dialogPane.lookupButton(websiteButton);
@@ -279,11 +263,7 @@ public final class DialogUtil {
 
     DialogPane dialogPane = dialog.getDialogPane();
 
-    dialogPane.getStylesheets().add(
-        DialogUtil.class.getResource("/style.css").toExternalForm()
-    );
-
-    dialogPane.getStyleClass().add("onelaunch-dialog");
+    applyDialogTheme(dialogPane);
 
     Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
     Button cancelButton = (Button) dialogPane.lookupButton(ButtonType.CANCEL);
@@ -353,5 +333,23 @@ public final class DialogUtil {
             });
         }
     );
+    }
+
+
+    
+    public static void applyDialogTheme(DialogPane dialogPane) {
+
+    dialogPane.getStylesheets().add(
+        DialogUtil.class.getResource("/style.css").toExternalForm()
+    );
+
+    String darkStylesheet =
+        DialogUtil.class.getResource("/dark.css").toExternalForm();
+
+    if ("true".equals(System.getProperty("onelaunch.darkMode"))) {
+        dialogPane.getStylesheets().add(darkStylesheet);
+    }
+
+    dialogPane.getStyleClass().add("onelaunch-dialog");
     }
 }
