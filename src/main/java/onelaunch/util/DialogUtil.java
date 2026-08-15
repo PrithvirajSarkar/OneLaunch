@@ -27,6 +27,7 @@ public final class DialogUtil {
 
     public enum ItemChoice {
     BROWSE,
+    FOLDER,
     WEBSITE,
     CANCEL
     }
@@ -182,7 +183,7 @@ public final class DialogUtil {
 
     alert.setTitle("Add Item");
     alert.setHeaderText("Choose what you want to add.");
-    alert.setContentText("Add an application, file, or website.");
+    alert.setContentText("Add an application, file, folder or website.");
 
     FontIcon icon = new FontIcon(FontAwesomeSolid.PLUS_CIRCLE);
     icon.setIconSize(24);
@@ -243,6 +244,72 @@ public final class DialogUtil {
     }
 
 
+    //FOR BROWSING FOLDERS 
+    public static ItemChoice showBrowseChoice() {
+
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+    alert.setTitle("Browse");
+    alert.setHeaderText("Choose what you want to add.");
+    alert.setContentText("Select a file, application, or folder.");
+
+    FontIcon icon = new FontIcon(FontAwesomeSolid.FOLDER_OPEN);
+    icon.setIconSize(24);
+    icon.getStyleClass().add("dialog-info-icon");
+
+    alert.setGraphic(icon);
+
+    setDialogIcon(alert);
+
+    ButtonType fileButton = new ButtonType(
+        "File / Application",
+        ButtonBar.ButtonData.LEFT
+    );
+
+    ButtonType folderButton = new ButtonType(
+        "Folder",
+        ButtonBar.ButtonData.LEFT
+    );
+
+    ButtonType cancelButton = new ButtonType(
+        "Cancel",
+        ButtonBar.ButtonData.CANCEL_CLOSE
+    );
+
+    alert.getButtonTypes().setAll(
+        fileButton,
+        folderButton,
+        cancelButton
+    );
+
+    DialogPane dialogPane = alert.getDialogPane();
+
+    applyDialogTheme(dialogPane);
+
+    Button file = (Button) dialogPane.lookupButton(fileButton);
+    Button folder = (Button) dialogPane.lookupButton(folderButton);
+    Button cancel = (Button) dialogPane.lookupButton(cancelButton);
+
+    file.getStyleClass().add("dialog-primary-button");
+    folder.getStyleClass().add("dialog-website-button");
+    cancel.getStyleClass().add("dialog-secondary-button");
+
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if (result.isEmpty()) {
+        return ItemChoice.CANCEL;
+    }
+
+    if (result.get() == fileButton) {
+        return ItemChoice.BROWSE;
+    }
+
+    if (result.get() == folderButton) {
+        return ItemChoice.FOLDER;
+    }
+
+    return ItemChoice.CANCEL;
+    }
 
     
     public static Optional<String> showWebsiteInput() {

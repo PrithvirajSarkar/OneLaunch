@@ -17,8 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 
+import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import java.util.Optional;
 
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
@@ -178,10 +179,22 @@ public class AddItemsScreen {
     LaunchItem item = null;
 
     // Browse
-    if (choice == DialogUtil.ItemChoice.BROWSE) {
+    // Browse
+if (choice == DialogUtil.ItemChoice.BROWSE) {
+
+    DialogUtil.ItemChoice browseChoice =
+            DialogUtil.showBrowseChoice();
+
+    if (browseChoice == DialogUtil.ItemChoice.CANCEL) {
+        return;
+    }
+
+    if (browseChoice == DialogUtil.ItemChoice.BROWSE) {
 
         FileChooser fileChooser = new FileChooser();
-        File selectedFile = fileChooser.showOpenDialog(main.getStage());
+
+        File selectedFile =
+                fileChooser.showOpenDialog(main.getStage());
 
         if (selectedFile == null) {
             return;
@@ -194,6 +207,26 @@ public class AddItemsScreen {
                 selectedFile.getAbsolutePath(),
                 type
         );
+    }
+
+    else if (browseChoice == DialogUtil.ItemChoice.FOLDER) {
+
+        DirectoryChooser directoryChooser =
+                new DirectoryChooser();
+
+        File selectedFolder =
+                directoryChooser.showDialog(main.getStage());
+
+        if (selectedFolder == null) {
+            return;
+        }
+
+        item = new LaunchItem(
+                selectedFolder.getName(),
+                selectedFolder.getAbsolutePath(),
+                ItemType.FOLDER
+        );
+        }
     }
 
     // Website
@@ -425,7 +458,7 @@ public class AddItemsScreen {
     Label subtitle = new Label(
             "Click \"+ Add Item\"\n"
           + "to add applications,\n"
-          + "files or websites."
+          + "files, folders or websites."
     );
 
     subtitle.getStyleClass().add("preview-label");
@@ -508,34 +541,40 @@ public class AddItemsScreen {
     return itemBox;
     }
 
-    private void editItem(LaunchItem originalItem){
-        if(originalItem.getType() == ItemType.WEBSITE){
-            Optional<String> result = DialogUtil.showWebsiteInput();
+    private void editItem(LaunchItem originalItem) {
 
-            if(result.isEmpty()){
-                return;
-            }
+    // WEBSITE
+    if (originalItem.getType() == ItemType.WEBSITE) {
 
-            String url = result.get().trim();
+        Optional<String> result = DialogUtil.showWebsiteInput();
 
-            if(url.isEmpty()){
-                return;
-            }
+        if (result.isEmpty()) {
+            return;
+        }
 
-            if (!url.contains(".") &&
-            !url.equalsIgnoreCase("localhost")){
-                DialogUtil.showWarning(
+        String url = result.get().trim();
+
+        if (url.isEmpty()) {
+            return;
+        }
+
+        if (!url.contains(".") &&
+            !url.equalsIgnoreCase("localhost")) {
+
+            DialogUtil.showWarning(
                 "Invalid Website",
                 "Please enter a valid website URL.",
                 "Examples:\n• youtube.com\n• https://github.com"
             );
 
             return;
-            }
+        }
 
-            if(!url.startsWith("http://") && !url.startsWith("https://")){
-                url = "https://" + url;
-            } 
+        if (!url.startsWith("http://") &&
+            !url.startsWith("https://")) {
+
+            url = "https://" + url;
+        }
 
         // Check for duplicate URL
         for (LaunchItem existingItem : items) {
@@ -550,23 +589,71 @@ public class AddItemsScreen {
                 );
 
                 return;
-                }
             }
+        }
 
-            int index = items.indexOf(originalItem);
+        int index = items.indexOf(originalItem);
 
-            LaunchItem editedItem = new LaunchItem(url, url, ItemType.WEBSITE);
+        LaunchItem editedItem =
+            new LaunchItem(url, url, ItemType.WEBSITE);
 
-            items.set(index, editedItem);
+        items.set(index, editedItem);
 
-            refreshItems();;
-            hasUnsavedChanges = true;
+        refreshItems();
+        hasUnsavedChanges = true;
 
+        return;
+    }
+
+    // FOLDER
+    if (originalItem.getType() == ItemType.FOLDER) {
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        File selectedFolder =
+            directoryChooser.showDialog(main.getStage());
+
+        if (selectedFolder == null) {
             return;
         }
 
+        String path = selectedFolder.getAbsolutePath();
+
+        // Check for duplicate folder
+        for (LaunchItem existingItem : items) {
+
+            if (existingItem != originalItem &&
+                existingItem.getPath().equalsIgnoreCase(path)) {
+
+                DialogUtil.showWarning(
+                    "Duplicate Item",
+                    "This folder has already been added.",
+                    "This folder already exists in this workspace."
+                );
+
+                return;
+            }
+        }
+
+        int index = items.indexOf(originalItem);
+
+        LaunchItem editedItem =
+            new LaunchItem(
+                selectedFolder.getName(),
+                path,
+                ItemType.FOLDER
+            );
+
+        items.set(index, editedItem);
+
+        refreshItems();
+        hasUnsavedChanges = true;
+
+        return;
+    }
 
 
+    
     // FILE / APPLICATION
     FileChooser fileChooser = new FileChooser();
 
@@ -596,17 +683,21 @@ public class AddItemsScreen {
 
             return;
         }
-        int index = items.indexOf(originalItem);
-        LaunchItem editedItem = new LaunchItem(
+    }
+
+    int index = items.indexOf(originalItem);
+
+    LaunchItem editedItem =
+        new LaunchItem(
             selectedFile.getName(),
             path,
             type
-        );      
-        items.set(index, editedItem);
-        
-        refreshItems();
-        hasUnsavedChanges = true;
-        }
+        );
+
+    items.set(index, editedItem);
+
+    refreshItems();
+    hasUnsavedChanges = true;
     }
 
 
