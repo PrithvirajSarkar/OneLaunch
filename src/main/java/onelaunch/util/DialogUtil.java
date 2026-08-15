@@ -182,7 +182,7 @@ public final class DialogUtil {
 
     alert.setTitle("Add Item");
     alert.setHeaderText("Choose what you want to add.");
-    alert.setContentText("Add an application, file, folder, or website.");
+    alert.setContentText("Add an application, file, or website.");
 
     FontIcon icon = new FontIcon(FontAwesomeSolid.PLUS_CIRCLE);
     icon.setIconSize(24);

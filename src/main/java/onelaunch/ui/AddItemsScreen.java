@@ -425,7 +425,7 @@ public class AddItemsScreen {
     Label subtitle = new Label(
             "Click \"+ Add Item\"\n"
           + "to add applications,\n"
-          + "folders, files or websites."
+          + "files or websites."
     );
 
     subtitle.getStyleClass().add("preview-label");
@@ -460,6 +460,18 @@ public class AddItemsScreen {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
+
+        Button editButton = new Button();
+
+        FontIcon editIcon = new FontIcon(FontAwesomeSolid.PEN);
+        editIcon.setIconSize(14);
+
+        editButton.setGraphic(editIcon);
+        editButton.getStyleClass().add("edit-item-button");
+
+        editButton.setOnAction(e -> {
+            editItem(item);
+        });
         Button deleteButton = new Button();
         FontIcon deleteIcon = new FontIcon(FontAwesomeSolid.TIMES);
         deleteIcon.setIconSize(14);
@@ -485,6 +497,7 @@ public class AddItemsScreen {
                 icon,
                 nameLabel,
                 spacer,
+                editButton,
                 deleteButton
         );
 
@@ -495,7 +508,112 @@ public class AddItemsScreen {
     return itemBox;
     }
 
+    private void editItem(LaunchItem originalItem){
+        if(originalItem.getType() == ItemType.WEBSITE){
+            Optional<String> result = DialogUtil.showWebsiteInput();
 
+            if(result.isEmpty()){
+                return;
+            }
+
+            String url = result.get().trim();
+
+            if(url.isEmpty()){
+                return;
+            }
+
+            if (!url.contains(".") &&
+            !url.equalsIgnoreCase("localhost")){
+                DialogUtil.showWarning(
+                "Invalid Website",
+                "Please enter a valid website URL.",
+                "Examples:\n• youtube.com\n• https://github.com"
+            );
+
+            return;
+            }
+
+            if(!url.startsWith("http://") && !url.startsWith("https://")){
+                url = "https://" + url;
+            } 
+
+        // Check for duplicate URL
+        for (LaunchItem existingItem : items) {
+
+            if (existingItem != originalItem &&
+                existingItem.getPath().equalsIgnoreCase(url)) {
+
+                DialogUtil.showWarning(
+                    "Duplicate Item",
+                    "This item has already been added.",
+                    "This item already exists in this workspace."
+                );
+
+                return;
+                }
+            }
+
+            int index = items.indexOf(originalItem);
+
+            LaunchItem editedItem = new LaunchItem(url, url, ItemType.WEBSITE);
+
+            items.set(index, editedItem);
+
+            refreshItems();;
+            hasUnsavedChanges = true;
+
+            return;
+        }
+
+
+
+    // FILE / APPLICATION
+    FileChooser fileChooser = new FileChooser();
+
+    File selectedFile =
+        fileChooser.showOpenDialog(main.getStage());
+
+    if (selectedFile == null) {
+        return;
+    }
+
+    ItemType type = detectItemType(selectedFile);
+
+    String path = selectedFile.getAbsolutePath();
+
+
+    // Check for duplicate path
+    for (LaunchItem existingItem : items) {
+
+        if (existingItem != originalItem &&
+            existingItem.getPath().equalsIgnoreCase(path)) {
+
+            DialogUtil.showWarning(
+                "Duplicate Item",
+                "This item has already been added.",
+                "This item already exists in this workspace."
+            );
+
+            return;
+        }
+        int index = items.indexOf(originalItem);
+        LaunchItem editedItem = new LaunchItem(
+            selectedFile.getName(),
+            path,
+            type
+        );      
+        items.set(index, editedItem);
+        
+        refreshItems();
+        hasUnsavedChanges = true;
+        }
+    }
+
+
+
+
+
+    //DETECTING TYPE OF SELECTION 
     private ItemType detectItemType(File file){
         String path = file.getAbsolutePath().toLowerCase();
 
