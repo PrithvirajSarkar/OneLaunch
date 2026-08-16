@@ -6,7 +6,43 @@ OneLaunch is a Java desktop application built with JavaFX that lets users group 
 
 Instead of opening the same resources individually every time, users can save them as a workspace and launch them together with one click.
 
-## ✨ Features
+---
+
+## Screenshots
+
+### Home Screen
+
+![OneLaunch Home](docs/images/home-light.png)
+
+The home screen provides quick access to saved workspaces, workspace search, pinning, editing, deletion, and one-click launching.
+
+### Workspace Editor
+
+![Workspace Editor](docs/images/workspace-items.png)
+
+A workspace can contain different types of launch items, including applications, files, folders, and websites.
+
+### Add Items
+
+![Add Item Dialog](docs/images/add-item.png)
+
+Items can be added through a simple dialog that supports applications, files, folders, and websites.
+
+### Dark Mode
+
+![OneLaunch Dark Mode](docs/images/home-dark.png)
+
+OneLaunch includes a persistent dark theme that can be enabled from the main interface.
+
+### About
+
+![About OneLaunch](docs/images/about.png)
+
+The About dialog provides application information, version details, and the technology stack used to build OneLaunch.
+
+---
+
+## Features
 
 ### Workspace Management
 
@@ -20,55 +56,52 @@ Instead of opening the same resources individually every time, users can save th
 
 A workspace can contain:
 
-- 🖥️ Applications
-- 📄 Files
-- 📁 Folders
-- 🌐 Websites
+- Applications
+- Files
+- Folders
+- Websites
 
-Items can be added, edited, removed, and checked for duplicates.
+Each launch item stores its name, path or URL, and item type.
 
-### User Experience
+### Launching
 
-- Light and dark themes
-- Persistent dark-mode preference
-- Unsaved changes protection
-- Confirmation dialogs
-- User-friendly error handling
-- Item-specific icons
-- Launch animations
+OneLaunch can launch:
 
-### Reliable Storage
+- Applications using `ProcessBuilder`
+- Files using the desktop integration
+- Folders using the desktop integration
+- Websites using the system browser
 
-Workspace data is stored locally as JSON using Gson.
+Items are launched independently. If an item fails to launch, OneLaunch informs the user and allows them to either continue launching the remaining items or stop.
 
-OneLaunch also handles corrupted workspace data:
+### Persistence
 
-```text
-Invalid JSON
-     ↓
-Detect corruption
-     ↓
-Create backup
-     ↓
-Recover with empty workspace list
-     ↓
-Continue running
-```
+OneLaunch stores workspace and application settings locally using JSON files.
 
-## 🖼️ Screenshots
+Workspace data and settings persist between application sessions.
 
-Screenshots will be added here after the final UI presentation is complete.
+### Dark Mode
 
-Planned screenshots:
+OneLaunch provides light and dark application themes using separate CSS stylesheets.
 
-- Home screen
-- Workspace creation
-- Adding items
-- Editing a workspace
-- Dark mode
-- About dialog
+The selected theme is persisted between application sessions.
 
-## 🛠️ Technology Stack
+### Error Handling
+
+The application handles common problems such as:
+
+- Empty workspace names
+- Duplicate workspace names
+- Duplicate launch items
+- Invalid website URLs
+- Empty workspace launches
+- Failed application, file, folder, or website launches
+- Corrupted workspace JSON
+- Unsaved workspace changes
+
+---
+
+## Technology Stack
 
 | Technology | Purpose |
 |---|---|
@@ -80,9 +113,11 @@ Planned screenshots:
 | CSS | Application themes |
 | Git | Version control |
 
-## 🏗️ Architecture
+---
 
-OneLaunch uses a simple layered structure:
+## Architecture
+
+OneLaunch uses a simple layered structure designed to keep responsibilities separated without introducing unnecessary complexity.
 
 ```text
 OneLaunch
@@ -112,21 +147,47 @@ OneLaunch
 
 Represents the core application data.
 
+The model layer contains:
+
+- `Workspace`
+- `LaunchItem`
+- `ItemType`
+
 ### UI
 
 Handles JavaFX screens and user interaction.
+
+The UI layer contains:
+
+- `Main`
+- `HomeScreen`
+- `AddWorkspaceScreen`
+- `AddItemsScreen`
 
 ### Service
 
 Handles persistent application data and settings.
 
+The service layer contains:
+
+- `StorageManager`
+- `SettingsManager`
+
 ### Utility
 
-Contains reusable dialog, display-name, and icon functionality.
+Contains reusable functionality used throughout the application.
 
-More details are available in [`docs/Architecture.md`](docs/Architecture.md).
+The utility layer contains:
 
-## 💾 Data Storage
+- `DialogUtil`
+- `DisplayNameUtil`
+- `IconUtil`
+
+More details are available in [Architecture](docs/Architecture.md).
+
+---
+
+## Data Storage
 
 Runtime data is stored locally:
 
@@ -143,77 +204,116 @@ data/
 
 The `data/` directory is generated at runtime and is excluded from Git so personal workspace data is not committed to the repository.
 
-## 🛡️ Error Handling
+If workspace data becomes corrupted, OneLaunch creates a backup before continuing.
 
-OneLaunch handles common problems such as:
+---
 
-- Empty workspace names
-- Duplicate workspace names
-- Duplicate launch items
-- Invalid website URLs
-- Empty workspace launches
-- Failed application/file/folder/website launches
-- Corrupted workspace JSON
-
-When workspace JSON is corrupted, OneLaunch creates a backup before continuing.
-
-## 🔄 How It Works
+## How It Works
 
 ### Create a Workspace
 
 ```text
 Home
- ↓
+  ↓
 Add Workspace
- ↓
+  ↓
 Enter Name
- ↓
+  ↓
 Add Items
- ↓
+  ↓
 Save
+```
+
+### Add Launch Items
+
+```text
+Add Item
+   │
+   ├── Browse
+   │    ├── Application
+   │    ├── File
+   │    └── Folder
+   │
+   └── Website
 ```
 
 ### Launch a Workspace
 
 ```text
 Home
- ↓
+  ↓
 Launch
- ↓
-Applications / Files / Folders / Websites
+  ↓
+Launch Items
+  ├── Applications
+  ├── Files
+  ├── Folders
+  └── Websites
 ```
 
 ### Edit a Workspace
 
 ```text
 Home
- ↓
-Workspace Menu
- ↓
+  ↓
 Edit
- ↓
+  ↓
 Modify Workspace
- ↓
+  ↓
 Save
 ```
 
-## 📂 Project Structure
+---
+
+## Error Handling
+
+OneLaunch uses user-facing dialogs to handle common failure cases instead of allowing unexpected application termination.
+
+Examples include:
+
+- Empty workspace names
+- Duplicate workspace names
+- Duplicate launch items
+- Invalid website URLs
+- Empty workspace launches
+- Failed application launches
+- Failed file launches
+- Failed folder launches
+- Failed website launches
+- Corrupted workspace JSON
+- Unsaved workspace changes
+
+When corrupted workspace JSON is detected, OneLaunch creates a backup of the corrupted file before continuing.
+
+---
+
+## Project Structure
 
 ```text
 OneLaunch/
 │
+├── .github/
+│
 ├── docs/
+│   ├── images/
+│   │   ├── about.png
+│   │   ├── add-item.png
+│   │   ├── home-dark.png
+│   │   ├── home-light.png
+│   │   └── workspace-items.png
+│   │
 │   ├── Architecture.md
 │   ├── FutureIdeas.md
 │   └── UserGuide.md
 │
 ├── src/
 │   └── main/
-│       ├── java/onelaunch/
-│       │   ├── model/
-│       │   ├── service/
-│       │   ├── ui/
-│       │   └── util/
+│       ├── java/
+│       │   └── onelaunch/
+│       │       ├── model/
+│       │       ├── service/
+│       │       ├── ui/
+│       │       └── util/
 │       │
 │       └── resources/
 │
@@ -224,9 +324,11 @@ OneLaunch/
 
 Runtime-generated data under `data/` is intentionally excluded from the repository.
 
-## ⚙️ Requirements
+---
 
-To build OneLaunch from source:
+## Requirements
+
+To build OneLaunch from source, install:
 
 - Java JDK 24
 - Maven
@@ -240,7 +342,9 @@ javac -version
 mvn -version
 ```
 
-## ▶️ Running from Source
+---
+
+## Running from Source
 
 Clone the repository:
 
@@ -263,7 +367,9 @@ mvn javafx:run
 
 The exact runtime configuration is defined in `pom.xml`.
 
-## 🧪 Testing
+---
+
+## Testing
 
 The current project has been manually tested across the core workflows, including:
 
@@ -278,12 +384,24 @@ The current project has been manually tested across the core workflows, includin
 - Website launching
 - Duplicate detection
 - Invalid URL handling
-- Unsaved changes
+- Unsaved changes protection
 - Dark-mode persistence
 - Corrupted JSON recovery
 - Backup creation
 
-## 🎯 Design Philosophy
+---
+
+## Documentation
+
+Additional project documentation is available here:
+
+- [Architecture](docs/Architecture.md)
+- [User Guide](docs/UserGuide.md)
+- [Future Ideas](docs/FutureIdeas.md)
+
+---
+
+## Design Philosophy
 
 OneLaunch intentionally keeps its architecture simple.
 
@@ -291,21 +409,18 @@ The project uses:
 
 - JavaFX for the desktop interface
 - JSON for local persistence
-- Separate service classes for storage
+- Separate service classes for storage and settings
 - Utility classes for reusable functionality
 - Git for version control
+- Maven for project and dependency management
 
-The goal is to maintain clear separation of responsibilities without introducing unnecessary frameworks or abstractions for a small desktop application.
+The goal is to maintain clear separation of responsibilities without introducing unnecessary frameworks or abstractions for a relatively small desktop application.
 
-## 📚 Documentation
+---
 
-- [Architecture](docs/Architecture.md)
-- [User Guide](docs/UserGuide.md)
-- [Future Ideas](docs/FutureIdeas.md)
+## Project
 
-## 👨‍💻 Project
-
-OneLaunch is a Java desktop software engineering project focused on applying practical development concepts including:
+OneLaunch is a Java desktop software engineering project focused on applying practical development concepts, including:
 
 - Object-oriented programming
 - JavaFX application development
@@ -313,6 +428,6 @@ OneLaunch is a Java desktop software engineering project focused on applying pra
 - JSON serialization
 - Input validation
 - Error handling
-- Version control with Git
 - Software architecture
+- Version control with Git
 - Technical documentation
