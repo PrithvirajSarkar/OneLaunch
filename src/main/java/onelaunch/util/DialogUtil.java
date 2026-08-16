@@ -363,7 +363,7 @@ public final class DialogUtil {
 
         Platform.runLater(() -> {
 
-        Stage dialodStage =(Stage) alert.getDialogPane()
+        Stage dialogStage =(Stage) alert.getDialogPane()
                         .getScene()
                         .getWindow();
 
@@ -372,7 +372,7 @@ public final class DialogUtil {
                         .getResourceAsStream("/onelaunch-icon.png")
         );
 
-        dialodStage.getIcons().setAll(appIcon);
+        dialogStage.getIcons().setAll(appIcon);
     });
     });
     }

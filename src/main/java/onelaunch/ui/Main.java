@@ -36,7 +36,7 @@ public class Main extends Application {
     private Scene scene;
     private Stage stage;
     private boolean darkMode = false;
-    private SettingsManager settingsManager = new SettingsManager();
+    private final SettingsManager settingsManager = new SettingsManager();
 
     private String getDarkStylesheet() {
     return getClass().getResource("/dark.css").toExternalForm();
@@ -167,9 +167,6 @@ public class Main extends Application {
         break;
 
         case FILE:
-        Desktop.getDesktop().open(new File(item.getPath()));
-        break;
-
         case FOLDER:
         Desktop.getDesktop().open(new File(item.getPath()));
         break;

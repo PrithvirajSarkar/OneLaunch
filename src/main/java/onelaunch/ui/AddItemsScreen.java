@@ -37,12 +37,12 @@ import onelaunch.util.DialogUtil.ConfirmationStyle;
 
 public class AddItemsScreen {
 
-    private Main main;
+    private final Main main;
     private String workspaceName;
     private boolean isEditMode = false;
     private Workspace originalWorkspace;
     private ArrayList<LaunchItem> items = new ArrayList<>();
-    private StorageManager storageManager = new StorageManager();
+    private final StorageManager storageManager = new StorageManager();
     private VBox itemsContainer;
     private boolean hasUnsavedChanges = false;
 

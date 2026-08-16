@@ -32,7 +32,7 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 public class HomeScreen {
 
     private Main main;
-    private StorageManager storageManager = new StorageManager();
+    private final StorageManager storageManager = new StorageManager();
 
     public HomeScreen(Main main) {
         this.main = main;
