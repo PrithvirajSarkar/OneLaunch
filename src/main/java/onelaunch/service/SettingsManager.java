@@ -3,6 +3,7 @@ package onelaunch.service;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,15 +21,21 @@ public class SettingsManager {
 
         String data = gson.toJson(settings);
 
-        try {
+        File file = new File(FILE_PATH);
 
-            FileWriter writer = new FileWriter(FILE_PATH);
+        File parentFolder = file.getParentFile();
+
+        if(parentFolder != null && !parentFolder.exists()) {
+            parentFolder.mkdirs();
+        }
+
+        try (FileWriter writer = new FileWriter(file)) {
 
             writer.write(data);
 
-            writer.close();
-
         } catch (IOException e) {
+
+            System.out.println("Could not save settings.");
 
             e.printStackTrace();
         }

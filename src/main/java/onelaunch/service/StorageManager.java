@@ -41,7 +41,7 @@ public class StorageManager {
             "workspaces.json.tmp"
         );
 
-        try (FileWriter writer = new FileWriter(file)) {
+        try (FileWriter writer = new FileWriter(tempFile)) {
             // First write the complete data to the temporary file
             writer.write(data);
 
