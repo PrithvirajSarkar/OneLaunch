@@ -7,10 +7,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class SettingsManager {
 
-    private static final String FILE_PATH = "data/settings.json";
+    private static final String APP_NAME = "OneLaunch";
+    private static final String FILE_NAME = "settings.json";
 
     public void saveDarkMode(boolean darkMode) {
 
@@ -21,11 +24,11 @@ public class SettingsManager {
 
         String data = gson.toJson(settings);
 
-        File file = new File(FILE_PATH);
+        File file = getSettingsFile();
 
         File parentFolder = file.getParentFile();
 
-        if(parentFolder != null && !parentFolder.exists()) {
+        if (parentFolder != null && !parentFolder.exists()) {
             parentFolder.mkdirs();
         }
 
@@ -36,23 +39,25 @@ public class SettingsManager {
         } catch (IOException e) {
 
             System.out.println("Could not save settings.");
-
             e.printStackTrace();
         }
     }
-
 
     public boolean loadDarkMode() {
 
         Gson gson = new Gson();
 
-        try {
+        File file = getSettingsFile();
 
-            FileReader reader = new FileReader(FILE_PATH);
+        migrateOldSettingsFile(file);
+
+        if (!file.exists()) {
+            return false;
+        }
+
+        try (FileReader reader = new FileReader(file)) {
 
             JsonObject settings = gson.fromJson(reader, JsonObject.class);
-
-            reader.close();
 
             if (settings == null || !settings.has("darkMode")) {
                 return false;
@@ -63,6 +68,79 @@ public class SettingsManager {
         } catch (IOException e) {
 
             return false;
+
+        } catch (Exception e) {
+
+            System.out.println("Settings data is invalid.");
+            return false;
+        }
+    }
+
+    private File getSettingsFile() {
+
+        return new File(
+            getDataDirectory(),
+            FILE_NAME
+        );
+    }
+
+    private File getDataDirectory() {
+
+        String localAppData = System.getenv("LOCALAPPDATA");
+
+        if (localAppData != null && !localAppData.isBlank()) {
+
+            return new File(
+                localAppData,
+                APP_NAME
+            );
+        }
+
+        // Fallback for environments where LOCALAPPDATA is unavailable
+        return new File(
+            System.getProperty("user.home"),
+            "AppData" + File.separator + "Local" + File.separator + APP_NAME
+        );
+    }
+
+    private void migrateOldSettingsFile(File newFile) {
+
+        if (newFile.exists()) {
+            return;
+        }
+
+        File oldFile = new File(
+            "data",
+            FILE_NAME
+        );
+
+        if (!oldFile.exists()) {
+            return;
+        }
+
+        File parentFolder = newFile.getParentFile();
+
+        if (parentFolder != null && !parentFolder.exists()) {
+            parentFolder.mkdirs();
+        }
+
+        try {
+
+            Files.copy(
+                oldFile.toPath(),
+                newFile.toPath(),
+                StandardCopyOption.REPLACE_EXISTING
+            );
+
+            System.out.println(
+                "Existing settings were migrated to the OneLaunch user data folder."
+            );
+
+        } catch (IOException e) {
+
+            System.out.println(
+                "Could not migrate existing settings."
+            );
         }
     }
 }

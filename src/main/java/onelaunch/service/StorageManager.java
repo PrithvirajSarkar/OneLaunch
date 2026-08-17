@@ -1,25 +1,25 @@
 package onelaunch.service;
 
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import onelaunch.model.Workspace;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-
-import com.google.gson.JsonSyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
+import onelaunch.model.Workspace;
+
 public class StorageManager {
 
-    private static final String FILE_PATH = "data/workspaces.json";
+    private static final String APP_NAME = "OneLaunch";
+    private static final String FILE_NAME = "workspaces.json";
+    private static final String BACKUP_FILE_NAME = "workspaces.json.backup";
 
     public void saveWorkspaces(ArrayList<Workspace> workspaces) {
 
@@ -27,9 +27,8 @@ public class StorageManager {
 
         String data = gson.toJson(workspaces);
 
-        File file = new File(FILE_PATH);
+        File file = getWorkspaceFile();
 
-        // Make sure the data folder exists
         File parentFolder = file.getParentFile();
 
         if (parentFolder != null && !parentFolder.exists()) {
@@ -42,6 +41,7 @@ public class StorageManager {
         );
 
         try (FileWriter writer = new FileWriter(tempFile)) {
+
             // First write the complete data to the temporary file
             writer.write(data);
 
@@ -54,25 +54,24 @@ public class StorageManager {
 
         try {
 
-        // Replace the real file only after the temporary write succeeded
-        Files.move(
-            tempFile.toPath(),
-            file.toPath(),
-            StandardCopyOption.REPLACE_EXISTING
-        );
+            // Replace the real file only after the temporary write succeeded
+            Files.move(
+                tempFile.toPath(),
+                file.toPath(),
+                StandardCopyOption.REPLACE_EXISTING
+            );
 
         } catch (IOException e) {
 
-        System.out.println("Could not replace workspace file.");
-        e.printStackTrace();
+            System.out.println("Could not replace workspace file.");
+            e.printStackTrace();
 
-        // Clean up temporary file if replacement failed
-        if (tempFile.exists()) {
-            tempFile.delete();
+            // Clean up temporary file if replacement failed
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
         }
     }
-    }
-
 
     public void saveWorkspace(Workspace workspace) {
 
@@ -83,12 +82,13 @@ public class StorageManager {
         saveWorkspaces(workspaces);
     }
 
-
     public ArrayList<Workspace> loadWorkspaces() {
 
         Gson gson = new Gson();
 
-        File file = new File(FILE_PATH);
+        File file = getWorkspaceFile();
+
+        migrateOldWorkspaceFiles(file);
 
         // No file yet = no saved workspaces
         if (!file.exists()) {
@@ -98,10 +98,10 @@ public class StorageManager {
         try (FileReader reader = new FileReader(file)) {
 
             Type workspaceListType =
-                    new TypeToken<ArrayList<Workspace>>() {}.getType();
+                new TypeToken<ArrayList<Workspace>>() {}.getType();
 
             ArrayList<Workspace> workspaces =
-                    gson.fromJson(reader, workspaceListType);
+                gson.fromJson(reader, workspaceListType);
 
             if (workspaces == null) {
                 return new ArrayList<>();
@@ -109,8 +109,10 @@ public class StorageManager {
 
             return workspaces;
 
-        } catch(JsonSyntaxException e){
+        } catch (JsonSyntaxException e) {
+
             System.out.println("Workspace data is corrupted.");
+
             createBackupOfCorruptedFile(file);
 
             return new ArrayList<>();
@@ -118,39 +120,128 @@ public class StorageManager {
         } catch (IOException e) {
 
             System.out.println("Could not load workspaces.");
+
             return new ArrayList<>();
 
         } catch (Exception e) {
 
             System.out.println("Workspace data is invalid.");
+
             return new ArrayList<>();
+        }
+    }
+
+    private File getWorkspaceFile() {
+
+        return new File(
+            getDataDirectory(),
+            FILE_NAME
+        );
+    }
+
+    private File getDataDirectory() {
+
+        String localAppData = System.getenv("LOCALAPPDATA");
+
+        if (localAppData != null && !localAppData.isBlank()) {
+
+            return new File(
+                localAppData,
+                APP_NAME
+            );
+        }
+
+        // Fallback for environments where LOCALAPPDATA is unavailable
+        return new File(
+            System.getProperty("user.home"),
+            "AppData" + File.separator + "Local" + File.separator + APP_NAME
+        );
+    }
+
+    private void migrateOldWorkspaceFiles(File newFile) {
+
+        if (newFile.exists()) {
+            return;
+        }
+
+        File oldFile = new File(
+            "data",
+            FILE_NAME
+        );
+
+        if (!oldFile.exists()) {
+            return;
+        }
+
+        File parentFolder = newFile.getParentFile();
+
+        if (parentFolder != null && !parentFolder.exists()) {
+            parentFolder.mkdirs();
+        }
+
+        try {
+
+            Files.copy(
+                oldFile.toPath(),
+                newFile.toPath(),
+                StandardCopyOption.REPLACE_EXISTING
+            );
+
+            System.out.println(
+                "Existing workspace data was migrated to the OneLaunch user data folder."
+            );
+
+            File oldBackupFile = new File(
+                "data",
+                BACKUP_FILE_NAME
+            );
+
+            if (oldBackupFile.exists()) {
+
+                File newBackupFile = new File(
+                    parentFolder,
+                    BACKUP_FILE_NAME
+                );
+
+                Files.copy(
+                    oldBackupFile.toPath(),
+                    newBackupFile.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING
+                );
+            }
+
+        } catch (IOException e) {
+
+            System.out.println(
+                "Could not migrate existing workspace data."
+            );
         }
     }
 
     private void createBackupOfCorruptedFile(File file) {
 
-    File backupFile = new File(
-        file.getParent(),
-        "workspaces.json.backup"
-    );
-
-    try {
-
-        Files.copy(
-            file.toPath(),
-            backupFile.toPath(),
-            StandardCopyOption.REPLACE_EXISTING
+        File backupFile = new File(
+            file.getParent(),
+            BACKUP_FILE_NAME
         );
 
-        System.out.println(
-            "A backup of the corrupted workspace file was created."
-        );
+        try {
 
-    } catch (IOException e) {
+            Files.copy(
+                file.toPath(),
+                backupFile.toPath(),
+                StandardCopyOption.REPLACE_EXISTING
+            );
 
-        System.out.println(
-            "Could not create backup of corrupted workspace file."
-        );
+            System.out.println(
+                "A backup of the corrupted workspace file was created."
+            );
+
+        } catch (IOException e) {
+
+            System.out.println(
+                "Could not create backup of corrupted workspace file."
+            );
         }
     }
 }
